@@ -1,6 +1,4 @@
-"""2021 - Autor: Arkadiusz Łęga, email:horemheb@vp.pl
-Klasa - główna pętla aplikacji. Łączy elemnty modelu,
-widoku i kontrolera."""
+"""2021 - Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 
 import threading
 import time
@@ -115,7 +113,7 @@ class MainLoop:
             self.__increment_counters()
             if self.__settings.collect_sensors_data_counter == self.__settings.collect_sensors_data_delay:
                 self.__settings.collect_sensors_data_counter = 0
-                self.__model.collectDataFromSensors()
+                self.__model.collect_data_from_sensors()
 
             # if self.__settings.graphs_refresh_counter == self.__settings.refresh_graps_delay:
             #     self.__settings.graphs_refresh_counter = 0
@@ -123,7 +121,7 @@ class MainLoop:
 
             if self.__settings.sending_delay_counter >= self.__settings.sending_delay:
                 self.__settings.sending_delay_counter = 0
-                self.__model.sendDataFromSensors()
+                self.__model.send_data_from_sensors()
                 next_update = datetime.now()+timedelta(seconds=self.__settings.sending_delay)
                 self.__view.updateSendingTime(next_update)
 

@@ -1,5 +1,4 @@
-"""2021 - Autor: Arkadiusz Łęga, email:horemheb@vp.pl
-Klasa - odpowiada za reakcje na przyciski w GUI"""
+"""2021 - Autor: Arkadiusz Łęga, email:horemheb@vp.pl"""
 
 
 class ClientAppController:
@@ -26,7 +25,7 @@ class ClientAppController:
         przełącza status przycisków oraz pól do wpisywania,
         a następnie łączy z serwerem.
         """
-        if self.__parent.collect_settings_from_GUI() and self.__model.getSettingsFromGUI():
+        if self.__parent.collect_settings_from_GUI() and self.__model.get_settings_from_GUI():
             self.__view.disableOrEnableFields()
             self.__model.connect()
 
