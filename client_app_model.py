@@ -286,27 +286,31 @@ class ClientAppModel:
         Zbiera dane z czujników i zapisuje do tablic, z których
         tworzone są wykresy.
         """
-        if len(self.__time_values) < self.__limit_collecting_sensor_data:
-            self.__time_values.append(datetime.now())
-            for i in range(values.NUMBER_OF_SENSORS):
-                digital_read = self.__get_data_recive(i)
-                if digital_read:
-                    digital_read.id = i
+        try:
+            size_time_values = len(self.__time_values) 
+            if size_time_values >= 0 and size_time_values < self.__limit_collecting_sensor_data :
+                self.__time_values.append(datetime.now())
+                for i in range(values.NUMBER_OF_SENSORS):
+                    digital_read = self.__get_data_recive(i)
+                    if digital_read:
+                        digital_read.id = i
 
-                    self.__save_temp_to_table(i, digital_read)
-                    self.__save_hum_to_table(i, digital_read)
-                    self.__view.update_sensor_view(i, digital_read)
-        else:
-            self.__time_values.pop(0)
-            self.__time_values.append(datetime.now())
-            for i in range(values.NUMBER_OF_SENSORS):
-                digital_read = self.__get_data_recive(i)
-                if digital_read:
-                    digital_read.id = i
+                        self.__save_temp_to_table(i, digital_read)
+                        self.__save_hum_to_table(i, digital_read)
+                        self.__view.update_sensor_view(i, digital_read)
+            else:
+                self.__time_values.pop(0)
+                self.__time_values.append(datetime.now())
+                for i in range(values.NUMBER_OF_SENSORS):
+                    digital_read = self.__get_data_recive(i)
+                    if digital_read:
+                        digital_read.id = i
 
-                    self.__save_temp_to_table(id=i, digital_read=digital_read, is_poped=True)
-                    self.__save_hum_to_table(id=i, digital_read=digital_read, is_poped=True)
-                    self.__view.update_sensor_view(i, digital_read)
+                        self.__save_temp_to_table(id=i, digital_read=digital_read, is_poped=True)
+                        self.__save_hum_to_table(id=i, digital_read=digital_read, is_poped=True)
+                        self.__view.update_sensor_view(i, digital_read)
+        except IndexError:
+                pass
 
     def __save_temp_to_table(self, id, digital_read, is_poped=False):
         temp_table = self.__temperature_values.get(id)

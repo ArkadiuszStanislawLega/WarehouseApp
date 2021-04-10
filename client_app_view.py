@@ -74,18 +74,18 @@ class ClientAppView:
                                                        textvariable=StringVar(self.__f_settings, value=str(values.DEFAULT_GRAPHS_REFRESHING_DELAY)))
 
         self.__l_limit_sensor_data_title = Label(self.__f_settings,
-                                                 text=strings.STRING_GRAPHS_REFRESHING_DELAY,
+                                                 text=strings.STRING_TITLE_LIMIT_SENSOR_DATA,
                                                  justify=LEFT)
         self.__e_limit_sensor_data_value = Entry(self.__f_settings,
                                                  width=values.SIZE_FREQUENCYS_ENTRY_WIDTH,
                                                  textvariable=StringVar(self.__f_settings, value=str(values.DEFAULT_LIMIT_COLLECTING_DATA_TO_GRAPH)))
 
         self.__l_title_collect_sensors_data_delay = Label(self.__f_settings,
-                                                          text=strings.STRING_TITLE_LIMIT_SENSOR_DATA,
+                                                          text=strings.STRING_TITLE_COLLECT_SENSORS_DATA_DELAY,
                                                           justify=LEFT)
         self.__e_collect_sensors_data_delay = Entry(self.__f_settings,
                                                     width=values.SIZE_FREQUENCYS_ENTRY_WIDTH,
-                                                    textvariable=StringVar(self.__f_settings, value=str(values.DEFAULT_COLLECT_SENSOR_DATA)))
+                                                    textvariable=StringVar(self.__f_settings, value=str(values.DEFAULT_COLLECT_SENSOR_DATA_DELAY)))
 
         self.__l_sending_delay_title.grid(row=0, column=0, sticky=W)
         self.__e_sending_delay_value.grid(row=0, column=1, sticky=W)

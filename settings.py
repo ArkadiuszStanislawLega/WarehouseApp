@@ -13,8 +13,8 @@ class Settings:
         self.__refresh_graps_delay = values.DEFAULT_GRAPHS_REFRESHING_DELAY
         self.__graphs_refresh_counter = values.DEFAULT_GRAPHS_REFRESHING_DELAY-1
 
-        self.__collect_sensors_data_delay = values.DEFAULT_COLLECT_SENSOR_DATA
-        self.__collect_sensors_data_counter = values.DEFAULT_COLLECT_SENSOR_DATA-1
+        self.__collect_sensors_data_delay = values.DEFAULT_COLLECT_SENSOR_DATA_DELAY
+        self.__collect_sensors_data_counter = values.DEFAULT_COLLECT_SENSOR_DATA_DELAY-1
 
     @property
     def server_ip(self):
