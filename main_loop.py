@@ -150,7 +150,7 @@ class MainLoop:
             self.__write_new_address()
             self.__write_new_port()
 
-            self.__model.getSettingsFromGUI()
+            self.__model.get_settings_from_GUI()
             return True
         except ValueError:
             self.__view.add_to_console(strings.STRING_VALUE_ERROR_MESSAGE)

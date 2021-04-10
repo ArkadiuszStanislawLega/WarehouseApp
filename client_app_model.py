@@ -304,8 +304,8 @@ class ClientAppModel:
                 if digital_read:
                     digital_read.id = i
 
-                    self.__save_temp_to_table(i, digital_read, True)
-                    self.__save_hum_to_table(i, digital_read, True)
+                    self.__save_temp_to_table(id=i, digital_read=digital_read, is_poped=True)
+                    self.__save_hum_to_table(id=i, digital_read=digital_read, is_poped=True)
                     self.__view.update_sensor_view(i, digital_read)
 
     def __save_temp_to_table(self, id, digital_read, is_poped=False):
