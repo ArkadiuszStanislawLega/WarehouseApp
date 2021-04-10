@@ -22,5 +22,5 @@ NUMBER_OF_SENSORS = 4
 
 FORMAT_TIME = "%H:%M:%S"
 
-HEADER = 500  # ilość bajtów które będą pobrane - 64
+HEADER = 522  # ilość bajtów które będą pobrane - 64
 EXIT_CODE = 666

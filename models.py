@@ -31,7 +31,7 @@ class DigitalReading(db.Model):
 
     def __repr__(self):
         time = self.time.strftime("%H:%M:%S")
-        return str(self.id) + ". Godzina: " + str(time) + ", temp: " + str(round(self.temperature, 2)) + "C, wilg: " + str(round(self.humidity, 2)) + "%"
+        return str(self.sensor_id) + ". Godzina: " + str(time) + ", temp: " + str(round(self.temperature, 2)) + "C, wilg: " + str(round(self.humidity, 2)) + "%"
 
     def Printing(self):
         time = self.time.strftime("%H:%M:%S")

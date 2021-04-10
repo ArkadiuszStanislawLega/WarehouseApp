@@ -63,7 +63,8 @@ class DataReceiver:
                 sensor = self.__sensors.get(chanel_id)
                 digital_read = DigitalReading(time=datetime.now(),
                                               temperature=sensor.get_temperature(),
-                                              humidity=sensor.get_humidity())
+                                              humidity=sensor.get_humidity(),
+                                              sensor_id=chanel_id+1)
                 return digital_read
             except Exception:
                 # print("Nie podłączono kanału ", chanel_id)

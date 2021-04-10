@@ -18,7 +18,7 @@ class MainLoop:
     Łączy model, widok i kontroler.
     """
 
-    APP_VERSION = 1.0
+    APP_VERSION = 1.1
 
     def __init__(self):
         """
