@@ -5,16 +5,23 @@ from database import db
 class Warehouse(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-    sensor = db.relationship('Sensor', backref='warehouse')
+    device = db.relationship('Device', backref='warehouse')
 
     def __repr__(self):
         return str(id) + " " + self.name
 
 
-class Sensor(db.Model):
+class Device(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
     warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id'))
+    sensor_id = db.relationship('Sensor', backref='device')
+
+
+class Sensor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250))
+    device_id = db.Column(db.Integer, db.ForeignKey('device.id'))
     digital_reading_id = db.relationship('DigitalReading', backref='sensor')
 
     def __repr__(self):
