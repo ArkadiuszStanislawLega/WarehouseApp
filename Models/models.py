@@ -17,6 +17,9 @@ class Device(db.Model):
     warehouse_id = db.Column(db.Integer, db.ForeignKey('warehouse.id'))
     sensor_id = db.relationship('Sensor', backref='device')
 
+    def __repr__(self):
+        return str(self.id) + " " + self.name + " " + str(self.warehouse_id)
+
 
 class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -25,7 +28,7 @@ class Sensor(db.Model):
     digital_reading_id = db.relationship('DigitalReading', backref='sensor')
 
     def __repr__(self):
-        return str(self.id) + " " + self.name + " " + str(self.warehouse_id)
+        return str(self.id) + " " + self.name + " " + str(self.device_id)
 
 
 class DigitalReading(db.Model):
