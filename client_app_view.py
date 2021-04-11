@@ -127,10 +127,11 @@ class ClientAppView:
             column += 2
 
     def updateGraphs(self, timesValues, humidityValues, temperatureValues):
-        for i in range(values.NUMBER_OF_SENSORS):
-            self.__sensors_views.get(i).show_graph(time_values=timesValues,
-                                                   humidity_values=humidityValues.get(i),
-                                                   temperature_values=temperatureValues.get(i))
+        if len(timesValues) == len(humidityValues) == len(temperatureValues) > 0 :
+            for i in range(values.NUMBER_OF_SENSORS):
+                    self.__sensors_views.get(i).show_graph(time_values=timesValues,
+                                                        humidity_values=humidityValues.get(i),
+                                                        temperature_values=temperatureValues.get(i))
 
     def update_sensor_view(self, sensor_id, digital_read):
         self.__sensors_views.get(sensor_id).update_values(title=str(sensor_id+1)+". " + strings.STRING_SENSOR_NAME,

@@ -115,9 +115,9 @@ class MainLoop:
                 self.__settings.collect_sensors_data_counter = 0
                 self.__model.collect_data_from_sensors()
 
-            # if self.__settings.graphs_refresh_counter == self.__settings.refresh_graps_delay:
-            #     self.__settings.graphs_refresh_counter = 0
-            #     self.__refres_graphs()
+            if self.__settings.graphs_refresh_counter == self.__settings.refresh_graps_delay:
+                self.__settings.graphs_refresh_counter = 0
+                self.__refres_graphs()
 
             if self.__settings.sending_delay_counter >= self.__settings.sending_delay:
                 self.__settings.sending_delay_counter = 0

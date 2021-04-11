@@ -36,7 +36,7 @@ class ClientAppModel:
         self.__server_ip = str(ip)
         self.__server_port = int(port)
 
-        self.__limit_collecting_sensor_data = 5
+        self.__limit_collecting_sensor_data = values.DEFAULT_LIMIT_COLLECTING_DATA_TO_GRAPH
 
         self.__time_next_message_send = 0
 
@@ -286,45 +286,51 @@ class ClientAppModel:
         Zbiera dane z czujników i zapisuje do tablic, z których
         tworzone są wykresy.
         """
+        size_time_values = len(self.__time_values) 
+        if size_time_values >= 0 and size_time_values < self.__limit_collecting_sensor_data :
+            self.__save_values_for_graphs()
+        else:
+            self.__save_values_for_graphs(is_poped=True)
+
+    def __save_values_for_graphs(self, is_poped=False):
+        self.__save_arg_in_table(value=datetime.now(), table=self.__time_values, is_poped=True)
+        for i in range(values.NUMBER_OF_SENSORS):
+            digital_read = self.__get_data_recive(i)
+
+            if digital_read:
+                self.__view.update_sensor_view(i, digital_read)
+                digital_read.id = i
+
+                table_hum = self.__humidity_values.get(i)
+                table_temp = self.__temperature_values.get(i)
+
+                self.__save_arg_in_table(value=digital_read.humidity,table=table_hum, is_poped=True)
+                self.__save_arg_in_table(value=digital_read.temperature, table=table_temp, is_poped=True)
+
+        
+    def __save_arg_in_table(self, value, table, is_poped=False):
         try:
-            size_time_values = len(self.__time_values) 
-            if size_time_values >= 0 and size_time_values < self.__limit_collecting_sensor_data :
-                self.__time_values.append(datetime.now())
-                for i in range(values.NUMBER_OF_SENSORS):
-                    digital_read = self.__get_data_recive(i)
-                    if digital_read:
-                        digital_read.id = i
+            if is_poped:
+                table.pop(0)
 
-                        self.__save_temp_to_table(i, digital_read)
-                        self.__save_hum_to_table(i, digital_read)
-                        self.__view.update_sensor_view(i, digital_read)
-            else:
-                self.__time_values.pop(0)
-                self.__time_values.append(datetime.now())
-                for i in range(values.NUMBER_OF_SENSORS):
-                    digital_read = self.__get_data_recive(i)
-                    if digital_read:
-                        digital_read.id = i
-
-                        self.__save_temp_to_table(id=i, digital_read=digital_read, is_poped=True)
-                        self.__save_hum_to_table(id=i, digital_read=digital_read, is_poped=True)
-                        self.__view.update_sensor_view(i, digital_read)
+            table.append(value)
         except IndexError:
-                pass
+            for i in range(len(table)-1):
+                    print(i, " ", table)
 
-    def __save_temp_to_table(self, id, digital_read, is_poped=False):
-        temp_table = self.__temperature_values.get(id)
-        if is_poped:
-            temp_table.pop(0)
-        else:
-            temp_table.append(digital_read.temperature)
+    # def __save_temp_to_table(self, id, digital_read, is_poped=False):
+    #     temp_table = self.__temperature_values.get(id)
+    #     if is_poped:
+    #         temp_table.pop(0)
 
-    def __save_hum_to_table(self, id, digital_read, is_poped=False):
-        hum_table = self.__humidity_values.get(id)
-        if is_poped:
-            hum_table.pop(0)
-        else:
-            hum_table.append(digital_read.humidity)
+    #     temp_table.append(digital_read.temperature)
+
+    # def __save_hum_to_table(self, id, digital_read, is_poped=False):
+    #     hum_table = self.__humidity_values.get(id)
+    #     if is_poped:
+    #         hum_table.pop(0)
+
+    #     hum_table.append(digital_read.humidity)
 
     def connect(self):
         """
