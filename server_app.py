@@ -4,7 +4,7 @@ import json
 import pickle
 from database import db
 from datetime import datetime, date
-from models import DigitalReading
+from Models.models import DigitalReading
 import values
 
 
