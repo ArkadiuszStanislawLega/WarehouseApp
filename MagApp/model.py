@@ -1,0 +1,2 @@
+class MagAppModel:
+    pass
