@@ -6,6 +6,7 @@ class MagAppView:
     SIZE_WINDOW_HEIGHT = 800
     SIZE_WINDOW = str(SIZE_WINDOW_WIDTH) + "x" + str(SIZE_WINDOW_HEIGHT)
     SIZE_ENTRY_WIDTH = 10
+    SIZE_LIST_GRID_WIDTH = 10
 
     STRING_DAY = "Dzień:"
     STRING_MONTH = "Miesiąc:"
@@ -14,6 +15,11 @@ class MagAppView:
     STRING_GRAPH_SELECT_RANGE_DATE = "Wskaż zakres dat:"
     STRING_SETTINGS_FROM = "od"
     STRING_SETTINGS_TO = "do"
+    STRING_WAREHOUSE = "Magazyn"
+    STRING_DEVICE = "Urządzenie"
+    STRING_SENSOR = "Czujnik"
+    STRING_TEMPERATURE = "Temperatura"
+    STRING_HUMIDITY = "Wilgotność"
 
     def __init__(self, version):
         self.__window = Tk()
@@ -21,7 +27,7 @@ class MagAppView:
         self.__window.geometry(self.SIZE_WINDOW)
 
         # region settingGraps
-        self.__f_settings = Frame(self.__window, bg="red")
+        self.__f_settings = Frame(self.__window)
         self.__f_settings.grid(row=0,
                                column=0,
                                columnspan=7,
@@ -105,6 +111,38 @@ class MagAppView:
         self.__b_confirm.grid(row=4, column=0)
 
         # endregion settingGraps
+
+        self.__f_sensors_list = Frame(self.__window)
+        self.__f_sensors_list.grid(row=1,
+                                   column=0,
+                                   columnspan=6,
+                                   sticky=W)
+
+        self.__l_warehouse_title = Label(self.__f_sensors_list,
+                                         text=self.STRING_WAREHOUSE,
+                                         width=self.SIZE_LIST_GRID_WIDTH)
+
+        self.__l_device_title = Label(self.__f_sensors_list,
+                                      text=self.STRING_DEVICE,
+                                      width=self.SIZE_LIST_GRID_WIDTH)
+
+        self.__l_sensor_title = Label(self.__f_sensors_list,
+                                      text=self.STRING_SENSOR,
+                                      width=self.SIZE_LIST_GRID_WIDTH)
+
+        self.__l_temperature_title = Label(self.__f_sensors_list,
+                                           text=self.STRING_TEMPERATURE,
+                                           width=self.SIZE_LIST_GRID_WIDTH)
+
+        self.__l_humidity_title = Label(self.__f_sensors_list,
+                                        text=self.STRING_HUMIDITY,
+                                        width=self.SIZE_LIST_GRID_WIDTH)
+
+        self.__l_warehouse_title.grid(row=0, column=1)
+        self.__l_device_title.grid(row=0, column=2)
+        self.__l_sensor_title.grid(row=0, column=3)
+        self.__l_temperature_title.grid(row=0, column=4)
+        self.__l_humidity_title.grid(row=0, column=5)
         mainloop()
 
     def show(self):
