@@ -10,17 +10,18 @@ import values
 
 class ServerApp:
     # region Constans
+    VERSION = 1.0
     HEADER = values.HEADER  # ilosc bajtow ktore beda pobrane
     PORT = values.DEFAULT_PORT
     # pobieram ip localhosta
     SERVER = socket.gethostbyname(socket.gethostname())
     ADDRESS = (SERVER, PORT)
-
-    MESSAGE_CLIENT_DISCONNECTED = " [CLIENT DISCONNECTED] "
-    MESSAGE_NEW_CONNECTION = " [NEW CONNECTION] "
-    MESSAGE_ACTIVE_CONNECTION = " [ACTIVE CONNECTIONS] "
-    MESSAGE_STARTING = " [STARTING] server is starting..."
-    MESSAGE_LISTENNING = " [LISTENING] Server is listening on "
+    MESSAGE_START_INFORMATION = "\nMagApp - serwer, wersja: " + str(VERSION) + "\nuwagi i błędy można zgłaszać na arkadiusz.stanislaw.lega@gmail.com\n" + (80*"_") + "\n"
+    MESSAGE_CLIENT_DISCONNECTED = " [KLIENT POŁĄCZONY] "
+    MESSAGE_NEW_CONNECTION = " [NOWE POŁĄCZENIE] "
+    MESSAGE_ACTIVE_CONNECTION = " [POŁĄCZENIE AKTYWNE] "
+    MESSAGE_STARTING = " [ROZPOCZYNAM] uruchamianie serwera.."
+    MESSAGE_LISTENNING = " [NASŁUCHIWANIE] Serwer nasłuchuje na "
     # endregion Constans
 
     def __init__(self):
@@ -65,6 +66,7 @@ class ServerApp:
         print(time + message)
 
     def start(self):
+        print(self.MESSAGE_START_INFORMATION)
         self.__print_message(self.MESSAGE_STARTING)
         db.create_all()
         # war = Warehouse()
