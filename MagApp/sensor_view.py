@@ -3,40 +3,47 @@ from Models.models import Warehouse
 
 
 class SensorView(Widget):
-    def __init__(self, warehouse, device, sensor, temperature, humidity, master=None, cnf={}, **k):
+    def __init__(self, warehouse, device, sensor, temperature, humidity, arg_row, master=None, cnf={}, **k):
         Widget.__init__(self, master, 'label', cnf)
-        self.__column_width = 10
+        self.__column_width = 20
+        self.__column_padx = 10
         if master:
             self.__check = Checkbutton(master=master,
-                                       width=5,
-                                       padx=1,
-                                       pady=1)
+                                       width=3,
+                                       padx=self.__column_padx)
 
             self.__l_warehouse = Label(master=master,
                                        width=self.__column_width,
-                                       text=str(warehouse))
+                                       text=str(warehouse),
+                                       padx=self.__column_padx,
+                                       bg="red")
 
             self.__l_device = Label(master=master,
                                     width=self.__column_width,
-                                    text=str(device))
+                                    text=str(device),
+                                    padx=self.__column_padx,
+                                    bg="gray")
             self.__l_sensor = Label(master=master,
                                     width=self.__column_width,
-                                    text=str(sensor))
+                                    text=str(sensor),
+                                    padx=self.__column_padx)
             self.__l_temperature = Label(master=master,
                                          bg="white",
                                          width=self.__column_width,
+                                         padx=self.__column_padx,
                                          text=str(temperature))
             self.__l_humidity = Label(master=master,
                                       bg="white",
                                       width=self.__column_width,
-                                      text=str(humidity))
+                                      text=str(humidity),
+                                      padx=self.__column_padx)
 
-            self.__check.grid(column=0, row=0)
-            self.__l_warehouse.grid(column=1, row=0)
-            self.__l_device.grid(column=2, row=0)
-            self.__l_sensor.grid(column=3, row=0)
-            self.__l_temperature.grid(column=4, row=0)
-            self.__l_humidity.grid(column=5, row=0)
+            self.__check.grid(column=0, row=arg_row)
+            self.__l_warehouse.grid(column=1, row=arg_row)
+            self.__l_device.grid(column=2, row=arg_row)
+            self.__l_sensor.grid(column=3, row=arg_row)
+            self.__l_temperature.grid(column=4, row=arg_row)
+            self.__l_humidity.grid(column=5, row=arg_row)
 
     def set_device(self, value):
         self.__l_device.config(text=str(value))
