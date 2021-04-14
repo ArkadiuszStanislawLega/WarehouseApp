@@ -11,7 +11,6 @@ class MagApp:
         self.__model = MagAppModel()
         self.__view = MagAppView(version=self.VERSION)
         self.__controller = MagAppController()
-        
 
 
 if __name__ == '__main__':

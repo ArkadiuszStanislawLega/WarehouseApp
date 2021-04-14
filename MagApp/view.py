@@ -115,46 +115,10 @@ class MagAppView:
         self.__b_confirm.grid(row=4, column=0)
 
         # endregion settingGraps
-
-        self.__l_check = Label(self.__window,
-                               text="check",
-                               width=3,
-                               padx=self.SIZE_LIST_GRID_COLUMN_PADX)
-
-        self.__l_warehouse_title = Label(self.__window,
-                                         text=self.STRING_WAREHOUSE,
-                                         width=self.SIZE_LIST_GRID_WIDTH)
-
-        self.__l_device_title = Label(self.__window,
-                                      text=self.STRING_DEVICE,
-                                      width=self.SIZE_LIST_GRID_WIDTH,
-                                      padx=self.SIZE_LIST_GRID_COLUMN_PADX)
-
-        self.__l_sensor_title = Label(self.__window,
-                                      text=self.STRING_SENSOR,
-                                      width=self.SIZE_LIST_GRID_WIDTH)
-
-        self.__l_temperature_title = Label(self.__window,
-                                           text=self.STRING_TEMPERATURE,
-                                           width=self.SIZE_LIST_GRID_WIDTH,
-                                           padx=self.SIZE_LIST_GRID_COLUMN_PADX)
-
-        self.__l_humidity_title = Label(self.__window,
-                                        text=self.STRING_HUMIDITY,
-                                        width=self.SIZE_LIST_GRID_WIDTH,
-                                        padx=self.SIZE_LIST_GRID_COLUMN_PADX)
-
-        self.__l_check.grid(row=1, column=0)
-        self.__l_warehouse_title.grid(row=1, column=1)
-        self.__l_device_title.grid(row=1, column=2)
-        self.__l_sensor_title.grid(row=1, column=3)
-        self.__l_temperature_title.grid(row=1, column=4)
-        self.__l_humidity_title.grid(row=1, column=5)
-
         self.__f_sensors_list = Frame(self.__window, bg="black")
         self.__f_sensors_list.grid(row=2,
                                    column=0,
-                                   columnspan=6,
+                                   columnspan=5,
                                    rowspan=4,
                                    sticky=W)
 
@@ -184,76 +148,6 @@ class MagAppView:
                          ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3), ]
         for i in range(len(self.__values)):
             self.__treeview.insert('', END, values=self.__values[i])
-
-        # sensors_views = {
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=0),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=1),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=2),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=3),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=4),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=5),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=6),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=7),
-        #     SensorView(master=self.__f_sensors_list,
-        #                warehouse="Bydgoszcz",
-        #                device="rspi-1",
-        #                sensor="BME280 - CNU4801/E",
-        #                temperature=21.23,
-        #                humidity=50.3,
-        #                arg_row=8),
-        # }
-
-        # for sensor_view in sensors_views:
-        #     sensor_view.grid()
-
         mainloop()
 
     def show(self):
