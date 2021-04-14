@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from MagApp.sensor_view import SensorView
-from Models.models import Warehouse, DigitalReading
+from Models.models import Warehouse, DigitalReading, Device, Sensor
 from database import db
 # from matplotlib.backends.backend_tkagg import (
 #     FigureCanvasTkAgg, NavigationToolbar2Tk)
@@ -96,6 +96,10 @@ class MagAppView:
                                   text="Pokaż wykres",
                                   command=self.test_db)
 
+        self.__b_refresh_db = Button(self.__f_settings,
+                                     text="Odśwież baze",
+                                     command=self.refresh)
+
         self.__l_title_settings.grid(row=0, column=0, columnspan=6, sticky=W)
         self.__l_date_range.grid(row=1, column=0, columnspan=6, sticky=W)
 
@@ -122,6 +126,7 @@ class MagAppView:
         self.__e_to_year.grid(row=3, column=6, sticky=W)
 
         self.__b_confirm.grid(row=4, column=0)
+        self.__b_refresh_db.grid(row=4, column=1)
 
         # endregion settingGraps
         # region table
@@ -168,6 +173,28 @@ class MagAppView:
     def confirm_button(self):
         return self.__b_confirm
 
+    def refresh(self):
+        warehouses = Warehouse.query.all()
+        devices = Device.query.all()
+        sensors = Sensor.query.all()
+        self.__values.clear()
+
+        for w in warehouses:
+            for d in devices:
+                for s in sensors:
+                    self.__values.append((w.name, d.name, s.name, 0, 23))
+        self.__treeview.delete(*self.__treeview.get_children())
+        for i in range(len(self.__values)):
+            self.__treeview.insert('', END, values=self.__values[i])
+            # print(w.name, d.name, s.name)
+        # print(warehouses, devices, sensors)
+
+        # warehouses = Warehouse.query.filter(Warehouse.id == 1)
+        # print(warehouses.device)
+        # sensor = Sensor.query.filter(Sensor.device_id >= 1).all()
+        # print(sensor[0].device_id)
+        # print(Sensor.query.filter(Sensor.device_id >= 1).all())
+
     def test_db(self):
         warehouses = Warehouse.query.all()
         sensors = {
@@ -193,23 +220,13 @@ class MagAppView:
             for x in sensors.get(i):
                 temp.get(i).append(x.temperature)
 
-        # fig = Figure(figsize=(1, 1), dpi=100)
-        # plot = fig.add_subplot(111)
         plt.plot(times, temp.get(1), label="1")
         plt.plot(times, temp.get(2), label="2")
         plt.plot(times, temp.get(3), label="3")
         plt.plot(times, temp.get(4), label="4")
         plt.legend()
-        # plt.ion()
-        # plt.xlim(0, 100)
-        # plt.ylim(-40, 80)
-        plt.show()
 
-        # canvas = FigureCanvasTkAgg(fig, master=self.__window)
-        # canvas.draw()
-        # fig.canvas.flush_events()
-        # canvas.get_tk_widget().grid(row=4,
-        #                             column=0, columnspan=6)
+        plt.show()
 
         # print(sensors)
         # print(times)
