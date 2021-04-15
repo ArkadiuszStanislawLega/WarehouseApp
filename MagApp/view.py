@@ -31,6 +31,7 @@ class MagAppView:
     STRING_SENSOR = "Czujnik"
     STRING_TEMPERATURE = "Temperatura"
     STRING_HUMIDITY = "Wilgotność"
+    STRING_LAST_READ = "Ostatni odczyt"
     # endregion constans
 
     def __init__(self, version):
@@ -144,8 +145,8 @@ class MagAppView:
                                    sticky=W)
 
         self.__columns = [self.STRING_WAREHOUSE, self.STRING_DEVICE,
-                          self.STRING_SENSOR, self.STRING_TEMPERATURE, self.STRING_HUMIDITY]
-        ac = ('all', 'n', 'e', 's', 'ne')
+                          self.STRING_SENSOR, self.STRING_TEMPERATURE, self.STRING_HUMIDITY, self.STRING_LAST_READ]
+        ac = (1, 2, 3, 4, 5, 6)
         self.__treeview = ttk.Treeview(self.__f_sensors_list,
                                        columns=ac,
                                        show="headings",
@@ -189,12 +190,10 @@ class MagAppView:
                     dr = dr[0]
 
                     self.__values[s.id] = (w.name, d.name, s.name, round(
-                        dr.temperature, 2), round(dr.humidity, 2))
+                        dr.temperature, 2), round(dr.humidity, 2), dr.time)
 
         for i in self.__values:
             self.__treeview.insert('', END, values=self.__values[i], tag=i)
-            # print(i)
-            # self.__treeview.insert('', END, values=self.__values[i], tag=i.key)
 
     def test_db(self):
         warehouses = Warehouse.query.all()
