@@ -7,6 +7,7 @@ from database import db
 #     FigureCanvasTkAgg, NavigationToolbar2Tk)
 # from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
+from sqlalchemy import desc
 
 
 class MagAppView:
@@ -100,6 +101,10 @@ class MagAppView:
                                      text="Odśwież baze",
                                      command=self.refresh)
 
+        self.__b_get_selected = Button(self.__f_settings,
+                                       text="Zaznaczone",
+                                       command=self.selected)
+
         self.__l_title_settings.grid(row=0, column=0, columnspan=6, sticky=W)
         self.__l_date_range.grid(row=1, column=0, columnspan=6, sticky=W)
 
@@ -127,6 +132,7 @@ class MagAppView:
 
         self.__b_confirm.grid(row=4, column=0)
         self.__b_refresh_db.grid(row=4, column=1)
+        self.__b_get_selected.grid(row=4, column=2)
 
         # endregion settingGraps
         # region table
@@ -155,14 +161,16 @@ class MagAppView:
             self.__treeview.heading(ac[i], text=self.__columns[i])
 
         self.__treeview.grid()
-        self.__values = [("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-                         ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-                         ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-                         ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-                         ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-                         ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3), ]
-        for i in range(len(self.__values)):
-            self.__treeview.insert('', END, values=self.__values[i])
+        self.__values = []
+        self.refresh()
+        # self.__values = [("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
+        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
+        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
+        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
+        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
+        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3), ]
+        # for i in range(len(self.__values)):
+        #     self.__treeview.insert('', END, values=self.__values[i])
         # endregion table
         mainloop()
 
@@ -182,26 +190,25 @@ class MagAppView:
         for w in warehouses:
             for d in devices:
                 for s in sensors:
-                    self.__values.append((w.name, d.name, s.name, 0, 23))
+                    dr = DigitalReading.query.filter(DigitalReading.sensor_id == s.id).order_by(
+                        desc(DigitalReading.id)).limit(1).all()
+                    dr = dr[0]
+
+                    self.__values.append(
+                        (w.name, d.name, s.name, round(
+                            dr.temperature, 2), round(dr.humidity, 2)))
         self.__treeview.delete(*self.__treeview.get_children())
+
         for i in range(len(self.__values)):
             self.__treeview.insert('', END, values=self.__values[i])
-            # print(w.name, d.name, s.name)
-        # print(warehouses, devices, sensors)
-
-        # warehouses = Warehouse.query.filter(Warehouse.id == 1)
-        # print(warehouses.device)
-        # sensor = Sensor.query.filter(Sensor.device_id >= 1).all()
-        # print(sensor[0].device_id)
-        # print(Sensor.query.filter(Sensor.device_id >= 1).all())
 
     def test_db(self):
         warehouses = Warehouse.query.all()
         sensors = {
-            1: DigitalReading.query.filter(DigitalReading.sensor_id == 1).limit(6).all(),
-            2: DigitalReading.query.filter(DigitalReading.sensor_id == 2).limit(6).all(),
-            3: DigitalReading.query.filter(DigitalReading.sensor_id == 3).limit(6).all(),
-            4: DigitalReading.query.filter(DigitalReading.sensor_id == 4).limit(6).all()
+            1: DigitalReading.query.filter(DigitalReading.sensor_id == 1).limit(100).all(),
+            2: DigitalReading.query.filter(DigitalReading.sensor_id == 2).limit(100).all(),
+            3: DigitalReading.query.filter(DigitalReading.sensor_id == 3).limit(100).all(),
+            4: DigitalReading.query.filter(DigitalReading.sensor_id == 4).limit(100).all()
         }
 
         times = []
@@ -231,3 +238,7 @@ class MagAppView:
         # print(sensors)
         # print(times)
         # print(temp)
+
+    def selected(self):
+        curItem = self.__treeview.focus()
+        print(self.__treeview.item(curItem))
