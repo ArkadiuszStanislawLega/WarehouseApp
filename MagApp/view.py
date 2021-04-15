@@ -29,9 +29,10 @@ class MagAppView:
     STRING_WAREHOUSE = "Magazyn"
     STRING_DEVICE = "Urządzenie"
     STRING_SENSOR = "Czujnik"
-    STRING_TEMPERATURE = "Temperatura"
-    STRING_HUMIDITY = "Wilgotność"
+    STRING_TEMPERATURE = "Temperatura [°C]"
+    STRING_HUMIDITY = "Wilgotność [%]"
     STRING_LAST_READ = "Ostatni odczyt"
+    STRING_SENSOR_ID = "Id czujnika"
     # endregion constans
 
     def __init__(self, version):
@@ -144,19 +145,26 @@ class MagAppView:
                                    rowspan=4,
                                    sticky=W)
 
-        self.__columns = [self.STRING_WAREHOUSE, self.STRING_DEVICE,
-                          self.STRING_SENSOR, self.STRING_TEMPERATURE, self.STRING_HUMIDITY, self.STRING_LAST_READ]
-        ac = (1, 2, 3, 4, 5, 6)
+        self.__columns = [self.STRING_WAREHOUSE,
+                          self.STRING_DEVICE,
+                          self.STRING_SENSOR_ID,
+                          self.STRING_SENSOR,
+                          self.STRING_TEMPERATURE,
+                          self.STRING_HUMIDITY,
+                          self.STRING_LAST_READ]
+        ac = (1, 2, 3, 4, 5, 6, 7)
         self.__treeview = ttk.Treeview(self.__f_sensors_list,
                                        columns=ac,
                                        show="headings",
                                        height=7)
 
-        self.__treeview.column(ac[0], width=200)
-        self.__treeview.column(ac[1], width=200)
-        self.__treeview.column(ac[2], width=200)
-        self.__treeview.column(ac[3], width=50)
-        self.__treeview.column(ac[4], width=50)
+        self.__treeview.column(ac[0], width=200, anchor=CENTER)
+        self.__treeview.column(ac[1], width=200, anchor=CENTER)
+        self.__treeview.column(ac[2], width=75, anchor=CENTER)
+        self.__treeview.column(ac[3], width=200, anchor=CENTER)
+        self.__treeview.column(ac[4], width=100, anchor=CENTER)
+        self.__treeview.column(ac[5], width=100, anchor=CENTER)
+        self.__treeview.column(ac[6], width=200, anchor=CENTER)
 
         for i in range(len(ac)):
             self.__treeview.heading(ac[i], text=self.__columns[i])
@@ -189,7 +197,7 @@ class MagAppView:
                         desc(DigitalReading.id)).limit(1).all()
                     dr = dr[0]
 
-                    self.__values[s.id] = (w.name, d.name, s.name, round(
+                    self.__values[s.id] = (w.name, d.name, s.id, s.name, round(
                         dr.temperature, 2), round(dr.humidity, 2), dr.time)
 
         for i in self.__values:
