@@ -161,17 +161,9 @@ class MagAppView:
             self.__treeview.heading(ac[i], text=self.__columns[i])
 
         self.__treeview.grid()
-        self.__values = []
+        self.__values = {}
         self.refresh()
-        # self.__values = [("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3),
-        #                  ("Bydgoszcz", "rspi-1", "BME280 - CNU4801/E", 21.23, 50.3), ]
-        # for i in range(len(self.__values)):
-        #     self.__treeview.insert('', END, values=self.__values[i])
-        # endregion table
+
         mainloop()
 
     def show(self):
@@ -185,7 +177,9 @@ class MagAppView:
         warehouses = Warehouse.query.all()
         devices = Device.query.all()
         sensors = Sensor.query.all()
+
         self.__values.clear()
+        self.__treeview.delete(*self.__treeview.get_children())
 
         for w in warehouses:
             for d in devices:
@@ -194,13 +188,13 @@ class MagAppView:
                         desc(DigitalReading.id)).limit(1).all()
                     dr = dr[0]
 
-                    self.__values.append(
-                        (w.name, d.name, s.name, round(
-                            dr.temperature, 2), round(dr.humidity, 2)))
-        self.__treeview.delete(*self.__treeview.get_children())
+                    self.__values[s.id] = (w.name, d.name, s.name, round(
+                        dr.temperature, 2), round(dr.humidity, 2))
 
-        for i in range(len(self.__values)):
-            self.__treeview.insert('', END, values=self.__values[i])
+        for i in self.__values:
+            self.__treeview.insert('', END, values=self.__values[i], tag=i)
+            # print(i)
+            # self.__treeview.insert('', END, values=self.__values[i], tag=i.key)
 
     def test_db(self):
         warehouses = Warehouse.query.all()
