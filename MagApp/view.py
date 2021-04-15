@@ -43,6 +43,8 @@ class MagAppView:
         self.__window.geometry(self.SIZE_WINDOW)
 
         # region settingGraps
+        self.__is_temperature_selected = BooleanVar()
+        self.__is_humidity_selected = BooleanVar()
 
         self.__f_settings = Frame(self.__window)
         self.__f_settings.pack(side=LEFT)
@@ -57,6 +59,18 @@ class MagAppView:
 
         self.__l_from = Label(self.__f_graph_settings,
                               text=self.STRING_SETTINGS_FROM)
+
+        self.__cb_temperature = Checkbutton(self.__f_graph_settings,
+                                            text=self.STRING_TEMPERATURE,
+                                            variable=self.__is_temperature_selected,
+                                            onvalue=True,
+                                            offvalue=False)
+
+        self.__cb_humidity = Checkbutton(self.__f_graph_settings,
+                                         text=self.STRING_HUMIDITY,
+                                         variable=self.__is_humidity_selected,
+                                         onvalue=True,
+                                         offvalue=False)
 
         self.__l_from_day = Label(self.__f_graph_settings,
                                   text=self.STRING_DAY)
@@ -109,33 +123,35 @@ class MagAppView:
                                        command=self.selected)
 
         self.__l_title_settings.grid(row=0, column=0, columnspan=6, sticky=W)
-        self.__l_date_range.grid(row=1, column=0, columnspan=6, sticky=W)
+        self.__cb_humidity.grid(row=1, column=0)
+        self.__cb_temperature.grid(row=1, column=1)
+        self.__l_date_range.grid(row=2, column=0, columnspan=6, sticky=W)
 
-        self.__l_from.grid(row=2, column=0, sticky=E)
+        self.__l_from.grid(row=3, column=0, sticky=E)
 
-        self.__l_from_day.grid(row=2, column=1, sticky=W)
-        self.__e_from_day.grid(row=2, column=2, sticky=W)
+        self.__l_from_day.grid(row=3, column=1, sticky=W)
+        self.__e_from_day.grid(row=3, column=2, sticky=W)
 
-        self.__l_from_month.grid(row=2, column=3, sticky=W)
-        self.__e_from_month.grid(row=2, column=4, sticky=W)
+        self.__l_from_month.grid(row=3, column=3, sticky=W)
+        self.__e_from_month.grid(row=3, column=4, sticky=W)
 
-        self.__l_from_year.grid(row=2, column=5, sticky=W)
-        self.__e_from_year.grid(row=2, column=6, sticky=W)
+        self.__l_from_year.grid(row=3, column=5, sticky=W)
+        self.__e_from_year.grid(row=3, column=6, sticky=W)
 
-        self.__l_to.grid(row=3, column=0, sticky=E)
+        self.__l_to.grid(row=4, column=0, sticky=E)
 
-        self.__l_to_day.grid(row=3, column=1, sticky=W)
-        self.__e_to_day.grid(row=3, column=2, sticky=W)
+        self.__l_to_day.grid(row=4, column=1, sticky=W)
+        self.__e_to_day.grid(row=4, column=2, sticky=W)
 
-        self.__l_to_month.grid(row=3, column=3, sticky=W)
-        self.__e_to_month.grid(row=3, column=4, sticky=W)
+        self.__l_to_month.grid(row=4, column=3, sticky=W)
+        self.__e_to_month.grid(row=4, column=4, sticky=W)
 
-        self.__l_to_year.grid(row=3, column=5, sticky=W)
-        self.__e_to_year.grid(row=3, column=6, sticky=W)
+        self.__l_to_year.grid(row=4, column=5, sticky=W)
+        self.__e_to_year.grid(row=4, column=6, sticky=W)
 
-        self.__b_confirm.grid(row=4, column=0)
-        self.__b_refresh_db.grid(row=4, column=1)
-        self.__b_get_selected.grid(row=4, column=2)
+        self.__b_confirm.grid(row=5, column=0)
+        self.__b_refresh_db.grid(row=5, column=1)
+        self.__b_get_selected.grid(row=5, column=2)
 
         # endregion settingGraps
         # region table
@@ -183,6 +199,14 @@ class MagAppView:
     @property
     def confirm_button(self):
         return self.__b_confirm
+
+    @property
+    def is_temperature_selected(self):
+        return self.__is_temperature_selected
+
+    @property
+    def is_humidity_selected(self):
+        return self.__is_humidity_selected
 
     def refresh(self):
         warehouses = Warehouse.query.all()

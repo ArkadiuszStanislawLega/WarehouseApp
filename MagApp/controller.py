@@ -34,6 +34,9 @@ class MagAppController:
             labels[i] = i
             temp[i] = []
             for x in sensors.get(i):
-                temp.get(i).append(x.humidity)
+                if self.__view.is_humidity_selected.get():
+                    temp.get(i).append(x.humidity)
+                elif self.__view.is_temperature_selected.get():
+                    temp.get(i).append(x.temperature)
 
         self.__view.show_graph(times=times, data=temp, labels=labels)
