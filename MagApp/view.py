@@ -285,4 +285,5 @@ class MagAppView:
     def selected(self):
         curItem = self.__treeview.focus()
         for i in self.__treeview.selection():
-            print(self.__treeview.item(i).get('values')[2])
+            # print(self.__treeview.item(i).get('values')[2])
+            print(self.__treeview.item(i, 'values')[2])
