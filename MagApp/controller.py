@@ -39,7 +39,7 @@ class MagAppController:
 
         self.__view.refresh(values)
 
-    def prepare_data_from_db(self, date=None):
+    def __prepare_data_from_db(self, date=None):
         full_data = {}
         filtered = {}
         curItem = self.__view.table.focus()
@@ -60,20 +60,7 @@ class MagAppController:
         else:
             return full_data
 
-    def create_humadity(self, sensors):
-        values = {}
-        for sensor in sensors:
-            hum_key = sensor
-            temp_key = sensor
-            self.__labels[sensor] = sensor
-            values[hum_key] = []
-
-            for digital_read in sensors.get(sensor):
-                values.get(hum_key).append(digital_read.humidity)
-
-        return values
-
-    def create_temperatures(self, sensors):
+    def __create_readings(self, sensors, temperature=False):
         values = {}
         for sensor in sensors:
             hum_key = sensor
@@ -81,11 +68,14 @@ class MagAppController:
             self.__labels[sensor] = sensor
             values[temp_key] = []
             for digital_read in sensors.get(sensor):
-                values.get(temp_key).append(digital_read.temperature)
+                if temperature:
+                    values.get(temp_key).append(digital_read.temperature)
+                else:
+                    values.get(temp_key).append(digital_read.humidity)
 
         return values
 
-    def create_temp_and_humidity(self, sensors):
+    def __create_temp_and_humidity(self, sensors):
         values = {}
         for sensor in sensors:
             hum_key = str(sensor) + self.STRING_LABEL_HUMIDITY
@@ -104,13 +94,12 @@ class MagAppController:
         return values
 
     def create_graph(self):
-        self.__labels = {}
         warehouses = Warehouse.query.all()
+        self.__labels = {}
 
         times = []
-        sensors = {}
-        d = datetime.datetime(2021, 4, 15)
-        sensors = self.prepare_data_from_db()
+        sensors = self.__prepare_data_from_db()
+        # d = datetime.datetime(2021, 4, 15)
 
         if len(sensors) > 0:
             for i in sensors.keys():
@@ -128,14 +117,15 @@ class MagAppController:
 
             if is_hum and not is_temp:
                 self.__view.show_graph(times=times,
-                                       data=self.create_humadity(sensors),
+                                       data=self.__create_readings(sensors),
                                        labels=self.__labels)
             elif is_temp and not is_hum:
                 self.__view.show_graph(times=times,
-                                       data=self.create_temperatures(sensors),
+                                       data=self.__create_readings(sensors,
+                                                                   temperature=True),
                                        labels=self.__labels)
             elif is_hum and is_temp:
+                data = self.__create_temp_and_humidity(sensors)
                 self.__view.show_graph(times=times,
-                                       data=self.create_temp_and_humidity(
-                                           sensors),
+                                       data=data,
                                        labels=self.__labels)
