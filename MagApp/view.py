@@ -2,12 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from MagApp.sensor_view import SensorView
 from Models.models import Warehouse, DigitalReading, Device, Sensor
-from database import db
-# from matplotlib.backends.backend_tkagg import (
-#     FigureCanvasTkAgg, NavigationToolbar2Tk)
-# from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
-from sqlalchemy import desc
 
 
 class MagAppView:
@@ -115,12 +110,7 @@ class MagAppView:
                                   text=self.STRING_SHOW_GRAPHS)
 
         self.__b_refresh_db = Button(self.__f_graph_settings,
-                                     text=self.STRING_REFRESH,
-                                     command=self.refresh)
-
-        self.__b_get_selected = Button(self.__f_graph_settings,
-                                       text="Zaznaczone",
-                                       command=self.selected)
+                                     text=self.STRING_REFRESH)
 
         self.__l_title_settings.grid(row=0, column=0, columnspan=6, sticky=W)
         self.__cb_humidity.grid(row=1, column=0)
@@ -151,7 +141,6 @@ class MagAppView:
 
         self.__b_confirm.grid(row=5, column=0)
         self.__b_refresh_db.grid(row=5, column=1)
-        self.__b_get_selected.grid(row=5, column=2)
 
         # endregion settingGraps
         # region table
@@ -189,9 +178,7 @@ class MagAppView:
                                            orient=VERTICAL)
         self.__s_vertical_list.pack(side=RIGHT, fill=Y)
 
-        self.refresh()
         # endregion table
-        # mainloop()
 
     def show(self):
         mainloop()
@@ -199,6 +186,10 @@ class MagAppView:
     @property
     def confirm_button(self):
         return self.__b_confirm
+
+    @property
+    def refresh_db(self):
+        return self.__b_refresh_db
 
     @property
     def is_temperature_selected(self):
@@ -212,31 +203,12 @@ class MagAppView:
     def table(self):
         return self.__tv_table
 
-    def refresh(self):
-        warehouses = Warehouse.query.all()
-        devices = Device.query.all()
-        sensors = Sensor.query.all()
+    def refresh(self, values):
+        if values and len(values) > 0:
+            self.__tv_table.delete(*self.__tv_table.get_children())
 
-        self.__values.clear()
-        self.__tv_table.delete(*self.__tv_table.get_children())
-
-        for w in warehouses:
-            for d in devices:
-                for s in sensors:
-                    dr = DigitalReading.query.filter(DigitalReading.sensor_id == s.id).order_by(
-                        desc(DigitalReading.id)).limit(1).all()
-                    dr = dr[0]
-                    time = dr.time.strftime("%d-%m-%y %H:%M:%S")
-                    self.__values[s.id] = (w.name,
-                                           d.name,
-                                           s.id,
-                                           s.name,
-                                           round(dr.temperature, 2),
-                                           round(dr.humidity, 2),
-                                           time)
-
-        for i in self.__values:
-            self.__tv_table.insert('', END, values=self.__values[i], tag=i)
+            for i in values:
+                self.__tv_table.insert('', END, values=values[i], tag=i)
 
     def show_graph(self, times, data, labels):
         """
@@ -253,46 +225,3 @@ class MagAppView:
 
         plt.legend()
         plt.show()
-
-    def test_db(self):
-        warehouses = Warehouse.query.all()
-
-        times = []
-        labels = {}
-        temp = {}
-
-        sensors = {
-            1: DigitalReading.query.filter(DigitalReading.sensor_id == 1).limit(100).all(),
-            2: DigitalReading.query.filter(DigitalReading.sensor_id == 2).limit(100).all(),
-            3: DigitalReading.query.filter(DigitalReading.sensor_id == 3).limit(100).all(),
-            4: DigitalReading.query.filter(DigitalReading.sensor_id == 4).limit(100).all()
-        }
-
-        for i in sensors.get(1):
-            times.append(i.time)
-
-        for i in sensors:
-            labels[i] = i
-            temp[i] = []
-            for x in sensors.get(i):
-                temp.get(i).append(x.humidity)
-
-        self.show_graph(times=times, data=temp, labels=labels)
-
-        # plt.plot(times, temp.get(1), label="1")
-        # plt.plot(times, temp.get(2), label="2")
-        # plt.plot(times, temp.get(3), label="3")
-        # plt.plot(times, temp.get(4), label="4")
-        # plt.legend()
-
-        # plt.show()
-
-        # print(sensors)
-        # print(times)
-        # print(temp)
-
-    def selected(self):
-        curItem = self.__tv_table.focus()
-        for i in self.__tv_table.selection():
-            # print(self.__treeview.item(i).get('values')[2])
-            print(int(self.__tv_table.item(i, 'tag')[0]))

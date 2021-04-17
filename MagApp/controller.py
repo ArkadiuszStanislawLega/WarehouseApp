@@ -11,8 +11,31 @@ class MagAppController:
         self.__model = model
         self.__view = view
         self.__view.confirm_button['command'] = self.create_graph
-
+        self.__view.refresh_db['command'] = self.refresh_table
+        self.refresh_table()
         self.__view.show()
+
+    def refresh_table(self):
+        warehouses = Warehouse.query.all()
+        devices = Device.query.all()
+        sensors = Sensor.query.all()
+        values = {}
+        for w in warehouses:
+            for d in devices:
+                for s in sensors:
+                    dr = DigitalReading.query.filter(DigitalReading.sensor_id == s.id).order_by(
+                        desc(DigitalReading.id)).limit(1).all()
+                    dr = dr[0]
+                    time = dr.time.strftime("%d-%m-%y %H:%M:%S")
+                    values[s.id] = (w.name,
+                                    d.name,
+                                    s.id,
+                                    s.name,
+                                    round(dr.temperature, 2),
+                                    round(dr.humidity, 2),
+                                    time)
+
+        self.__view.refresh(values)
 
     def create_graph(self):
         warehouses = Warehouse.query.all()
