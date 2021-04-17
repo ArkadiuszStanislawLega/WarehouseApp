@@ -40,25 +40,25 @@ class MagAppController:
         self.__view.refresh(values)
 
     def prepare_data_from_db(self, date=None):
-        date_range = {}
+        full_data = {}
         filtered = {}
         curItem = self.__view.table.focus()
         for i in self.__view.table.selection():
             ids = int(self.__view.table.item(i, 'tag')[0])
 
-            date_range[ids] = DigitalReading.query.filter(
+            full_data[ids] = DigitalReading.query.filter(
                 DigitalReading.sensor_id == ids).all()
 
             if date:
                 filtered[ids] = []
-                for sensor in date_range[ids]:
+                for sensor in full_data[ids]:
                     if sensor.time > date:
                         filtered.get(ids).append(sensor)
 
         if date:
             return filtered
         else:
-            return date_range
+            return full_data
 
     def create_humadity(self, sensors):
         values = {}
