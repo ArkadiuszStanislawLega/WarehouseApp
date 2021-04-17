@@ -1,6 +1,7 @@
 from Models.models import Warehouse, DigitalReading, Device, Sensor
 from database import db
 from sqlalchemy import desc
+import datetime
 
 
 class MagAppController:
@@ -14,6 +15,7 @@ class MagAppController:
         self.__view.refresh_db['command'] = self.refresh_table
         self.refresh_table()
         self.__view.show()
+        self.__labels = {}
 
     def refresh_table(self):
         warehouses = Warehouse.query.all()
@@ -37,65 +39,103 @@ class MagAppController:
 
         self.__view.refresh(values)
 
-    def create_graph(self):
-        warehouses = Warehouse.query.all()
-
-        times = []
-        labels = {}
-        values = {}
-        sensors = {}
-
-        # 4: DigitalReading.query.filter(DigitalReading.sensor_id == 4).limit(100).all()
-
+    def prepare_data_from_db(self, date=None):
+        date_range = {}
+        filtered = {}
         curItem = self.__view.table.focus()
         for i in self.__view.table.selection():
             ids = int(self.__view.table.item(i, 'tag')[0])
 
-            sensors[ids] = DigitalReading.query.filter(
+            date_range[ids] = DigitalReading.query.filter(
                 DigitalReading.sensor_id == ids).all()
+
+            if date:
+                filtered[ids] = []
+                for sensor in date_range[ids]:
+                    if sensor.time > date:
+                        filtered.get(ids).append(sensor)
+
+        if date:
+            return filtered
+        else:
+            return date_range
+
+    def create_humadity(self, sensors):
+        values = {}
+        for sensor in sensors:
+            hum_key = sensor
+            temp_key = sensor
+            self.__labels[sensor] = sensor
+            values[hum_key] = []
+
+            for digital_read in sensors.get(sensor):
+                values.get(hum_key).append(digital_read.humidity)
+
+        return values
+
+    def create_temperatures(self, sensors):
+        values = {}
+        for sensor in sensors:
+            hum_key = sensor
+            temp_key = sensor
+            self.__labels[sensor] = sensor
+            values[temp_key] = []
+            for digital_read in sensors.get(sensor):
+                values.get(temp_key).append(digital_read.temperature)
+
+        return values
+
+    def create_temp_and_humidity(self, sensors):
+        values = {}
+        for sensor in sensors:
+            hum_key = str(sensor) + self.STRING_LABEL_HUMIDITY
+            temp_key = str(sensor) + self.STRING_LABEL_TEMPERATURE
+
+            self.__labels[hum_key] = hum_key
+            self.__labels[temp_key] = temp_key
+
+            values[hum_key] = []
+            values[temp_key] = []
+
+            for digital_read in sensors.get(sensor):
+                values.get(hum_key).append(digital_read.humidity)
+                values.get(temp_key).append(digital_read.temperature)
+
+        return values
+
+    def create_graph(self):
+        self.__labels = {}
+        warehouses = Warehouse.query.all()
+
+        times = []
+        sensors = {}
+        d = datetime.datetime(2021, 4, 15)
+        sensors = self.prepare_data_from_db()
 
         if len(sensors) > 0:
             for i in sensors.keys():
-                for x in sensors.get(i):
-                    times.append(x.time)
+                # Upewnianie się że mamy jednakowy dystans czasowy.
+                # Tworzę tabele z czasami które były zbierane w określonym czasie.
+                for digital_read in sensors.get(i):
+                    times.append(digital_read.time)
 
                 break
 
+            # Flagi wskazujące czy wykres ma być złożony z temperatury
+            # i wilgoci, czy tylko jeden parametrów jest wybrany.
             is_temp = self.__view.is_temperature_selected.get()
             is_hum = self.__view.is_humidity_selected.get()
 
-            for i in sensors:
-
-                hum_key = i
-                temp_key = i
-
-                if is_hum and not is_temp:
-                    labels[i] = i
-                    values[hum_key] = []
-
-                elif is_temp and not is_hum:
-                    labels[i] = i
-                    values[temp_key] = []
-
-                elif is_hum and is_temp:
-                    hum_key = str(i) + self.STRING_LABEL_HUMIDITY
-                    temp_key = str(i) + self.STRING_LABEL_TEMPERATURE
-
-                    labels[hum_key] = hum_key
-                    labels[temp_key] = temp_key
-
-                    values[hum_key] = []
-                    values[temp_key] = []
-
-                for x in sensors.get(i):
-                    if self.__view.is_humidity_selected.get() and not self.__view.is_temperature_selected.get():
-                        values.get(hum_key).append(x.humidity)
-
-                    elif self.__view.is_temperature_selected.get() and not self.__view.is_humidity_selected.get():
-                        values.get(temp_key).append(x.temperature)
-
-                    elif self.__view.is_humidity_selected.get() and self.__view.is_temperature_selected.get():
-                        values.get(hum_key).append(x.humidity)
-                        values.get(temp_key).append(x.temperature)
-
-            self.__view.show_graph(times=times, data=values, labels=labels)
+            if is_hum and not is_temp:
+                self.__view.show_graph(times=times,
+                                       data=self.create_humadity(sensors),
+                                       labels=self.__labels)
+            elif is_temp and not is_hum:
+                self.__view.show_graph(times=times,
+                                       data=self.create_temperatures(sensors),
+                                       labels=self.__labels)
+            elif is_hum and is_temp:
+                self.__view.show_graph(times=times,
+                                       data=self.create_temp_and_humidity(
+                                           sensors),
+                                       labels=self.__labels)
