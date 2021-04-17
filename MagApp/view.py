@@ -244,7 +244,7 @@ class MagAppView:
         słownika z listami danych i słownikami etykiet.
 
         Args:
-            times ([table[datetime]]): Czasy w których zosatły wykonane pomiary
+            times ([table[datetime]]): Czasy w których zostały wykonane pomiary
             data ([dict<float>]): Pobrane pomiary
             labels ([dict<string>]): Nazwy etykiet kolorów wykresów
         """

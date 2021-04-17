@@ -20,54 +20,59 @@ class MagAppController:
         times = []
         labels = {}
         values = {}
+        sensors = {}
 
         # 4: DigitalReading.query.filter(DigitalReading.sensor_id == 4).limit(100).all()
 
-        sensors = {
-            1: DigitalReading.query.filter(DigitalReading.sensor_id == 1).all(),
-            2: DigitalReading.query.filter(DigitalReading.sensor_id == 2).all(),
-            3: DigitalReading.query.filter(DigitalReading.sensor_id == 3).all(),
-            4: DigitalReading.query.filter(DigitalReading.sensor_id == 4).all()
-        }
+        curItem = self.__view.table.focus()
+        for i in self.__view.table.selection():
+            ids = int(self.__view.table.item(i, 'tag')[0])
 
-        for i in sensors.get(1):
-            times.append(i.time)
+            sensors[ids] = DigitalReading.query.filter(
+                DigitalReading.sensor_id == ids).all()
 
-        is_temp = self.__view.is_temperature_selected.get()
-        is_hum = self.__view.is_humidity_selected.get()
+        if len(sensors) > 0:
+            for i in sensors.keys():
+                for x in sensors.get(i):
+                    times.append(x.time)
 
-        for i in sensors:
+                break
 
-            hum_key = i
-            temp_key = i
+            is_temp = self.__view.is_temperature_selected.get()
+            is_hum = self.__view.is_humidity_selected.get()
 
-            if is_hum and not is_temp:
-                labels[i] = i
-                values[hum_key] = []
+            for i in sensors:
 
-            elif is_temp and not is_hum:
-                labels[i] = i
-                values[temp_key] = []
+                hum_key = i
+                temp_key = i
 
-            elif is_hum and is_temp:
-                hum_key = str(i) + self.STRING_LABEL_HUMIDITY
-                temp_key = str(i) + self.STRING_LABEL_TEMPERATURE
+                if is_hum and not is_temp:
+                    labels[i] = i
+                    values[hum_key] = []
 
-                labels[hum_key] = hum_key
-                labels[temp_key] = temp_key
+                elif is_temp and not is_hum:
+                    labels[i] = i
+                    values[temp_key] = []
 
-                values[hum_key] = []
-                values[temp_key] = []
+                elif is_hum and is_temp:
+                    hum_key = str(i) + self.STRING_LABEL_HUMIDITY
+                    temp_key = str(i) + self.STRING_LABEL_TEMPERATURE
 
-            for x in sensors.get(i):
-                if self.__view.is_humidity_selected.get() and not self.__view.is_temperature_selected.get():
-                    values.get(hum_key).append(x.humidity)
+                    labels[hum_key] = hum_key
+                    labels[temp_key] = temp_key
 
-                elif self.__view.is_temperature_selected.get() and not self.__view.is_humidity_selected.get():
-                    values.get(temp_key).append(x.temperature)
+                    values[hum_key] = []
+                    values[temp_key] = []
 
-                elif self.__view.is_humidity_selected.get() and self.__view.is_temperature_selected.get():
-                    values.get(hum_key).append(x.humidity)
-                    values.get(temp_key).append(x.temperature)
+                for x in sensors.get(i):
+                    if self.__view.is_humidity_selected.get() and not self.__view.is_temperature_selected.get():
+                        values.get(hum_key).append(x.humidity)
 
-        self.__view.show_graph(times=times, data=values, labels=labels)
+                    elif self.__view.is_temperature_selected.get() and not self.__view.is_humidity_selected.get():
+                        values.get(temp_key).append(x.temperature)
+
+                    elif self.__view.is_humidity_selected.get() and self.__view.is_temperature_selected.get():
+                        values.get(hum_key).append(x.humidity)
+                        values.get(temp_key).append(x.temperature)
+
+            self.__view.show_graph(times=times, data=values, labels=labels)
