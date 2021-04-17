@@ -167,23 +167,23 @@ class MagAppView:
                           self.STRING_LAST_READ]
         ac = (1, 2, 3, 4, 5, 6, 7)
         self.__values = {}
-        self.__treeview = ttk.Treeview(self.__f_sensors_list,
+        self.__tv_table = ttk.Treeview(self.__f_sensors_list,
                                        columns=ac,
                                        show="headings",
                                        height=100)
 
-        self.__treeview.column(ac[0], width=200, anchor=CENTER)
-        self.__treeview.column(ac[1], width=200, anchor=CENTER)
-        self.__treeview.column(ac[2], width=75, anchor=CENTER)
-        self.__treeview.column(ac[3], width=200, anchor=CENTER)
-        self.__treeview.column(ac[4], width=100, anchor=CENTER)
-        self.__treeview.column(ac[5], width=100, anchor=CENTER)
-        self.__treeview.column(ac[6], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[0], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[1], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[2], width=75, anchor=CENTER)
+        self.__tv_table.column(ac[3], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[4], width=100, anchor=CENTER)
+        self.__tv_table.column(ac[5], width=100, anchor=CENTER)
+        self.__tv_table.column(ac[6], width=200, anchor=CENTER)
 
         for i in range(len(ac)):
-            self.__treeview.heading(ac[i], text=self.__columns[i])
+            self.__tv_table.heading(ac[i], text=self.__columns[i])
 
-        self.__treeview.pack(side=LEFT, fill=Y)
+        self.__tv_table.pack(side=LEFT, fill=Y)
 
         self.__s_vertical_list = Scrollbar(self.__f_sensors_list,
                                            orient=VERTICAL)
@@ -208,13 +208,17 @@ class MagAppView:
     def is_humidity_selected(self):
         return self.__is_humidity_selected
 
+    @property
+    def table(self):
+        return self.__tv_table
+
     def refresh(self):
         warehouses = Warehouse.query.all()
         devices = Device.query.all()
         sensors = Sensor.query.all()
 
         self.__values.clear()
-        self.__treeview.delete(*self.__treeview.get_children())
+        self.__tv_table.delete(*self.__tv_table.get_children())
 
         for w in warehouses:
             for d in devices:
@@ -223,11 +227,16 @@ class MagAppView:
                         desc(DigitalReading.id)).limit(1).all()
                     dr = dr[0]
                     time = dr.time.strftime("%d-%m-%y %H:%M:%S")
-                    self.__values[s.id] = (w.name, d.name, s.id, s.name, round(
-                        dr.temperature, 2), round(dr.humidity, 2), time)
+                    self.__values[s.id] = (w.name,
+                                           d.name,
+                                           s.id,
+                                           s.name,
+                                           round(dr.temperature, 2),
+                                           round(dr.humidity, 2),
+                                           time)
 
         for i in self.__values:
-            self.__treeview.insert('', END, values=self.__values[i], tag=i)
+            self.__tv_table.insert('', END, values=self.__values[i], tag=i)
 
     def show_graph(self, times, data, labels):
         """
@@ -283,7 +292,7 @@ class MagAppView:
         # print(temp)
 
     def selected(self):
-        curItem = self.__treeview.focus()
-        for i in self.__treeview.selection():
+        curItem = self.__tv_table.focus()
+        for i in self.__tv_table.selection():
             # print(self.__treeview.item(i).get('values')[2])
-            print(self.__treeview.item(i, 'values')[2])
+            print(int(self.__tv_table.item(i, 'tag')[0]))
