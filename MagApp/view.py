@@ -51,7 +51,7 @@ class MagAppView:
         self.__f_settings.pack(side=LEFT)
 
         self.__f_graph_settings = Frame(self.__f_settings)
-        self.__f_graph_settings.pack(side=TOP, fill=BOTH)
+        self.__f_graph_settings.pack()
 
         self.__l_title_settings = Label(self.__f_graph_settings,
                                         text=self.STRING_GRAPH_SETTINGS_TITLE)
@@ -165,7 +165,7 @@ class MagAppView:
         # endregion settingGraps
         # region table
         self.__f_sensors_list = Frame(self.__window)
-        self.__f_sensors_list.pack(side=BOTTOM, fill=BOTH)
+        self.__f_sensors_list.pack()
 
         self.__columns = [self.STRING_WAREHOUSE,
                           self.STRING_DEVICE,
