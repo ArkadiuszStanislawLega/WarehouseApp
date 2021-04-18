@@ -94,13 +94,12 @@ class MagAppController:
         return values
 
     def create_graph(self):
-        warehouses = Warehouse.query.all()
         self.__labels = {}
         sensors = {}
-
         times = []
 
         from_date = self.__view.get_from_date()
+
         if from_date:
             sensors = self.__prepare_data_from_db(from_date)
         else:

@@ -3,7 +3,7 @@ from tkinter import ttk
 from MagApp.sensor_view import SensorView
 from Models.models import Warehouse, DigitalReading, Device, Sensor
 from matplotlib import pyplot as plt
-import datetime
+from datetime import date, timedelta
 
 
 class MagAppView:
@@ -32,11 +32,16 @@ class MagAppView:
     STRING_SHOW_GRAPHS = "Pokaż wykres"
     STRING_REFRESH = "Odśwież"
     # endregion constans
+    NUMBER_OF_DAYS_EARLIER = 31
 
     def __init__(self, version):
         self.__window = Tk()
         self.__window.title("MagApp - v" + str(version))
         self.__window.geometry(self.SIZE_WINDOW)
+
+        self.__current_date = date.today()
+        self.__month_earlier = self.__current_date - \
+            timedelta(self.NUMBER_OF_DAYS_EARLIER)
 
         # region settingGraps
         self.__is_temperature_selected = BooleanVar()
@@ -72,19 +77,25 @@ class MagAppView:
                                   text=self.STRING_DAY)
 
         self.__e_from_day = Entry(self.__f_graph_settings,
-                                  width=self.SIZE_ENTRY_WIDTH)
+                                  width=self.SIZE_ENTRY_WIDTH,
+                                  textvariable=StringVar(self.__f_graph_settings,
+                                                         value=str(self.__month_earlier.day)))
 
         self.__l_from_month = Label(self.__f_graph_settings,
                                     text=self.STRING_MONTH)
 
         self.__e_from_month = Entry(self.__f_graph_settings,
-                                    width=self.SIZE_ENTRY_WIDTH)
+                                    width=self.SIZE_ENTRY_WIDTH,
+                                    textvariable=StringVar(self.__f_graph_settings,
+                                                           value=str(self.__month_earlier.month)))
 
         self.__l_from_year = Label(self.__f_graph_settings,
                                    text=self.STRING_YEAR)
 
         self.__e_from_year = Entry(self.__f_graph_settings,
-                                   width=self.SIZE_ENTRY_WIDTH)
+                                   width=self.SIZE_ENTRY_WIDTH,
+                                   textvariable=StringVar(self.__f_graph_settings,
+                                                          value=str(self.__month_earlier.year)))
 
         self.__l_to = Label(self.__f_graph_settings,
                             text=self.STRING_SETTINGS_TO)
@@ -93,19 +104,25 @@ class MagAppView:
                                 text=self.STRING_DAY)
 
         self.__e_to_day = Entry(self.__f_graph_settings,
-                                width=self.SIZE_ENTRY_WIDTH)
+                                width=self.SIZE_ENTRY_WIDTH,
+                                textvariable=StringVar(self.__f_graph_settings,
+                                                       value=str(self.__current_date.day)))
 
         self.__l_to_month = Label(self.__f_graph_settings,
                                   text=self.STRING_MONTH)
 
         self.__e_to_month = Entry(self.__f_graph_settings,
-                                  width=self.SIZE_ENTRY_WIDTH)
+                                  width=self.SIZE_ENTRY_WIDTH,
+                                  textvariable=StringVar(self.__f_graph_settings,
+                                                         value=str(self.__current_date.month)))
 
         self.__l_to_year = Label(self.__f_graph_settings,
                                  text=self.STRING_YEAR)
 
         self.__e_to_year = Entry(self.__f_graph_settings,
-                                 width=self.SIZE_ENTRY_WIDTH)
+                                 width=self.SIZE_ENTRY_WIDTH,
+                                 textvariable=StringVar(self.__f_graph_settings,
+                                                        value=str(self.__current_date.year)))
 
         self.__b_confirm = Button(self.__f_graph_settings,
                                   text=self.STRING_SHOW_GRAPHS)
@@ -189,27 +206,41 @@ class MagAppView:
             day = int(self.__e_from_day.get())
             month = int(self.__e_from_month.get())
             year = int(self.__e_from_year.get())
+
+            if len(self.__e_from_year.get()) == 4:
+                return datetime.datetime(year, month, day)
+
+            return None
+
+        except ValueError:
+            return None
+
+    def get_from_date(self):
+        try:
+            day = int(self.__e_from_day.get())
+            month = int(self.__e_from_month.get())
+            year = int(self.__e_from_year.get())
             return datetime.datetime(year, month, day)
         except ValueError:
             return None
 
-    @property
+    @ property
     def confirm_button(self):
         return self.__b_confirm
 
-    @property
+    @ property
     def refresh_db(self):
         return self.__b_refresh_db
 
-    @property
+    @ property
     def is_temperature_selected(self):
         return self.__is_temperature_selected
 
-    @property
+    @ property
     def is_humidity_selected(self):
         return self.__is_humidity_selected
 
-    @property
+    @ property
     def table(self):
         return self.__tv_table
 
@@ -222,7 +253,7 @@ class MagAppView:
 
     def show_graph(self, times, data, labels):
         """
-        Rysuje wykres z podanego czasu, 
+        Rysuje wykres z podanego czasu,
         słownika z listami danych i słownikami etykiet.
 
         Args:
