@@ -73,6 +73,8 @@ class MagAppView:
                                          onvalue=True,
                                          offvalue=False)
 
+        self.__cb_humidity.select()
+
         self.__l_from_day = Label(self.__f_graph_settings,
                                   text=self.STRING_DAY)
 
