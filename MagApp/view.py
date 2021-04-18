@@ -215,12 +215,14 @@ class MagAppView:
         except ValueError:
             return None
 
-    def get_from_date(self):
+    def get_to_date(self):
         try:
-            day = int(self.__e_from_day.get())
-            month = int(self.__e_from_month.get())
-            year = int(self.__e_from_year.get())
-            return datetime(year, month, day)
+            day = int(self.__e_to_day.get())
+            month = int(self.__e_to_month.get())
+            year = int(self.__e_to_year.get())
+
+            if len(self.__e_to_year.get()) == 4:
+                return datetime(year, month, day)
         except ValueError:
             return None
 

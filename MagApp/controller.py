@@ -39,7 +39,7 @@ class MagAppController:
 
         self.__view.refresh(values)
 
-    def __prepare_data_from_db(self, date=None):
+    def __prepare_data_from_db(self, from_date=None, to_date=None):
         full_data = {}
         filtered = {}
         curItem = self.__view.table.focus()
@@ -49,13 +49,13 @@ class MagAppController:
             full_data[ids] = DigitalReading.query.filter(
                 DigitalReading.sensor_id == ids).all()
 
-            if date:
+            if from_date:
                 filtered[ids] = []
                 for sensor in full_data[ids]:
-                    if sensor.time > date:
+                    if sensor.time >= from_date and sensor.time <= to_date:
                         filtered.get(ids).append(sensor)
 
-        if date:
+        if from_date:
             return filtered
         else:
             return full_data
@@ -99,9 +99,11 @@ class MagAppController:
         times = []
 
         from_date = self.__view.get_from_date()
+        to_date = self.__view.get_to_date()
 
-        if from_date:
-            sensors = self.__prepare_data_from_db(from_date)
+        if from_date and to_date:
+            sensors = self.__prepare_data_from_db(from_date=from_date,
+                                                  to_date=to_date)
         else:
             sensors = self.__prepare_data_from_db()
 
