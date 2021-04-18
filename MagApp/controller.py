@@ -96,9 +96,16 @@ class MagAppController:
     def create_graph(self):
         warehouses = Warehouse.query.all()
         self.__labels = {}
+        sensors = {}
 
         times = []
-        sensors = self.__prepare_data_from_db()
+
+        from_date = self.__view.get_from_date()
+        if from_date:
+            sensors = self.__prepare_data_from_db(from_date)
+        else:
+            sensors = self.__prepare_data_from_db()
+
         # d = datetime.datetime(2021, 4, 15)
 
         if len(sensors) > 0:
@@ -115,15 +122,18 @@ class MagAppController:
             is_temp = self.__view.is_temperature_selected.get()
             is_hum = self.__view.is_humidity_selected.get()
 
+            # Wyświetlenie wilgotności
             if is_hum and not is_temp:
                 self.__view.show_graph(times=times,
                                        data=self.__create_readings(sensors),
                                        labels=self.__labels)
+            # Wyświetlenie temperatury
             elif is_temp and not is_hum:
                 self.__view.show_graph(times=times,
                                        data=self.__create_readings(sensors,
                                                                    temperature=True),
                                        labels=self.__labels)
+            # Wyświetelnie temperatury i wilgotności
             elif is_hum and is_temp:
                 data = self.__create_temp_and_humidity(sensors)
                 self.__view.show_graph(times=times,

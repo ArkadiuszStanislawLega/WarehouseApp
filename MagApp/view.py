@@ -3,6 +3,7 @@ from tkinter import ttk
 from MagApp.sensor_view import SensorView
 from Models.models import Warehouse, DigitalReading, Device, Sensor
 from matplotlib import pyplot as plt
+import datetime
 
 
 class MagAppView:
@@ -182,6 +183,15 @@ class MagAppView:
 
     def show(self):
         mainloop()
+
+    def get_from_date(self):
+        try:
+            day = int(self.__e_from_day.get())
+            month = int(self.__e_from_month.get())
+            year = int(self.__e_from_year.get())
+            return datetime.datetime(year, month, day)
+        except ValueError:
+            return None
 
     @property
     def confirm_button(self):
