@@ -48,10 +48,7 @@ class MagAppView:
         self.__month_earlier = self.__current_date - \
             timedelta(self.NUMBER_OF_DAYS_EARLIER)
 
-        # region settingGraps
-        self.__is_temperature_selected = BooleanVar()
-        self.__is_humidity_selected = BooleanVar()
-
+        # region LeftSite
         self.__f_settings = Frame(self.__window)
         self.__f_settings.pack(side=LEFT)
         # region Logo
@@ -138,6 +135,9 @@ class MagAppView:
                                      text="Dodaj czujnik")
         self.__b_add_sensor.grid(row=1, column=4)
         # endregion AddSensor
+        # region Graps
+        self.__is_temperature_selected = BooleanVar()
+        self.__is_humidity_selected = BooleanVar()
 
         self.__f_graph_settings = LabelFrame(self.__f_settings,
                                              text=self.STRING_GRAPH_SETTINGS_TITLE,
@@ -250,8 +250,8 @@ class MagAppView:
 
         self.__b_confirm.grid(row=5, column=0)
         self.__b_refresh_db.grid(row=5, column=1)
-
-        # endregion settingGraps
+        # endregion Graps
+        # endregion LeftSite
         # region table
         self.__f_sensors_list = Frame(self.__window)
         self.__f_sensors_list.pack()
