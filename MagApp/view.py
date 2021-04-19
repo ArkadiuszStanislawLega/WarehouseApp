@@ -89,19 +89,40 @@ class MagAppView:
         self.__l_add_device.grid(row=0, column=0)
         self.__e_add_device = Entry(self.__f_add_device)
         self.__e_add_device.grid(row=1, column=0)
-        choices = ["Bydgoszcz", "Szczecin", "Poznań"]
+        choices_warehouses = ["Bydgoszcz", "Szczecin", "Poznań"]
 
-        tkvar = StringVar(self.__f_add_device)
-        tkvar.set("Bydgoszcz")  # set the default option
+        tkvar_warehouses = StringVar(self.__f_add_device)
+        tkvar_warehouses.set("Bydgoszcz")
 
         self.__om_select_warehouse = OptionMenu(self.__f_add_device,
-                                                tkvar,
-                                                *choices)
+                                                tkvar_warehouses,
+                                                *choices_warehouses)
         self.__om_select_warehouse.grid(row=1, column=1)
         self.__b_add_device = Button(self.__f_add_device,
                                      text="Dodaj urządzenie")
         self.__b_add_device.grid(row=2, column=1)
         # endregion AddDevice
+
+        # region AddSensor
+        self.__f_add_sensor = Frame(self.__f_settings)
+        self.__f_add_sensor.pack(anchor=W)
+        self.__l_add_sensor = Label(text="Dodaj czujnik")
+        self.__l_add_sensor.pack()
+        self.__e_add_sensor = Entry(self.__f_add_sensor)
+        self.__e_add_sensor.pack()
+        choices_device = ["rspi-1", "rspi-2", "rspi-3"]
+
+        tkvar_device = StringVar(self.__f_add_device)
+        tkvar_device.set("rspi-1")
+
+        self.__om_select_device = OptionMenu(self.__f_add_sensor,
+                                             tkvar_device,
+                                             *choices_device)
+        self.__om_select_device.pack()
+        self.__b_add_sensor = Button(self.__f_add_sensor,
+                                     text="Dodaj czujnik")
+        self.__b_add_sensor.pack()
+        # endregion AddSensor
 
         self.__f_graph_settings = Frame(self.__f_settings)
         self.__f_graph_settings.pack()
