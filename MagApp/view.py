@@ -49,7 +49,7 @@ class MagAppView:
             timedelta(self.NUMBER_OF_DAYS_EARLIER)
 
         # region LeftSite
-        self.__f_settings = Frame(self.__window)
+        self.__f_settings = Frame(self.__window, width=100)
         self.__f_settings.pack(side=LEFT)
         # region Logo
         image = Image.open(self.__logo_path)
@@ -72,13 +72,13 @@ class MagAppView:
         self.__lf_add_warehouse.pack(anchor=W, expand=YES, fill=BOTH)
         self.__l_add_warehouse_set_name = Label(self.__lf_add_warehouse,
                                                 text="Nazwa magazynu:")
-        self.__l_add_warehouse_set_name.grid(row=0, column=0)
+        self.__l_add_warehouse_set_name.pack(side=LEFT)
         self.__e_add_warehouse = Entry(self.__lf_add_warehouse)
-        self.__e_add_warehouse.grid(row=0, column=1)
+        self.__e_add_warehouse.pack(side=LEFT)
 
         self.__b_add_warehouse = Button(self.__lf_add_warehouse,
                                         text="Dodaj magazyn")
-        self.__b_add_warehouse.grid(row=1, column=2)
+        self.__b_add_warehouse.pack(expand=YES, fill=BOTH)
         # endregion AddWarehouse
         # region AddDevice
         self.__lf_add_device = LabelFrame(self.__f_settings,
@@ -105,7 +105,7 @@ class MagAppView:
         self.__om_select_warehouse.grid(row=0, column=3)
         self.__b_add_device = Button(self.__lf_add_device,
                                      text="Dodaj urządzenie")
-        self.__b_add_device.grid(row=1, column=4)
+        self.__b_add_device.grid(row=1, column=0, columnspan=4)
         # endregion AddDevice
         # region AddSensor
         self.__lf_add_sensor = LabelFrame(self.__f_settings,
@@ -133,7 +133,7 @@ class MagAppView:
         self.__om_select_device.grid(row=0, column=3)
         self.__b_add_sensor = Button(self.__lf_add_sensor,
                                      text="Dodaj czujnik")
-        self.__b_add_sensor.grid(row=1, column=4)
+        self.__b_add_sensor.grid(row=1, column=0, columnspan=4)
         # endregion AddSensor
         # region Graps
         self.__is_temperature_selected = BooleanVar()
@@ -144,12 +144,6 @@ class MagAppView:
                                              padx=10,
                                              pady=10)
         self.__f_graph_settings.pack(anchor=W, expand=YES, fill=BOTH)
-
-        self.__l_date_range = Label(self.__f_graph_settings,
-                                    text=self.STRING_GRAPH_SELECT_RANGE_DATE)
-
-        self.__l_from = Label(self.__f_graph_settings,
-                              text=self.STRING_SETTINGS_FROM)
 
         self.__cb_temperature = Checkbutton(self.__f_graph_settings,
                                             text=self.STRING_TEMPERATURE,
@@ -165,53 +159,62 @@ class MagAppView:
 
         self.__cb_humidity.select()
 
-        self.__l_from_day = Label(self.__f_graph_settings,
+        self.__f_input_from_date = Frame(self.__f_graph_settings)
+        self.__l_date_range = Label(self.__f_input_from_date,
+                                    text=self.STRING_GRAPH_SELECT_RANGE_DATE)
+
+        self.__l_from = Label(self.__f_input_from_date,
+                              text=self.STRING_SETTINGS_FROM)
+
+        self.__l_from_day = Label(self.__f_input_from_date,
                                   text=self.STRING_DAY)
 
-        self.__e_from_day = Entry(self.__f_graph_settings,
+        self.__e_from_day = Entry(self.__f_input_from_date,
                                   width=self.SIZE_ENTRY_WIDTH,
                                   textvariable=StringVar(self.__f_graph_settings,
                                                          value=str(self.__month_earlier.day)))
 
-        self.__l_from_month = Label(self.__f_graph_settings,
+        self.__l_from_month = Label(self.__f_input_from_date,
                                     text=self.STRING_MONTH)
 
-        self.__e_from_month = Entry(self.__f_graph_settings,
+        self.__e_from_month = Entry(self.__f_input_from_date,
                                     width=self.SIZE_ENTRY_WIDTH,
                                     textvariable=StringVar(self.__f_graph_settings,
                                                            value=str(self.__month_earlier.month)))
 
-        self.__l_from_year = Label(self.__f_graph_settings,
+        self.__l_from_year = Label(self.__f_input_from_date,
                                    text=self.STRING_YEAR)
 
-        self.__e_from_year = Entry(self.__f_graph_settings,
+        self.__e_from_year = Entry(self.__f_input_from_date,
                                    width=self.SIZE_ENTRY_WIDTH,
                                    textvariable=StringVar(self.__f_graph_settings,
                                                           value=str(self.__month_earlier.year)))
 
-        self.__l_to = Label(self.__f_graph_settings,
+        self.__f_input_to_date = Frame(self.__f_graph_settings)
+
+        self.__l_to = Label(self.__f_input_to_date,
                             text=self.STRING_SETTINGS_TO)
 
-        self.__l_to_day = Label(self.__f_graph_settings,
+        self.__l_to_day = Label(self.__f_input_to_date,
                                 text=self.STRING_DAY)
 
-        self.__e_to_day = Entry(self.__f_graph_settings,
+        self.__e_to_day = Entry(self.__f_input_to_date,
                                 width=self.SIZE_ENTRY_WIDTH,
                                 textvariable=StringVar(self.__f_graph_settings,
                                                        value=str(self.__current_date.day)))
 
-        self.__l_to_month = Label(self.__f_graph_settings,
+        self.__l_to_month = Label(self.__f_input_to_date,
                                   text=self.STRING_MONTH)
 
-        self.__e_to_month = Entry(self.__f_graph_settings,
+        self.__e_to_month = Entry(self.__f_input_to_date,
                                   width=self.SIZE_ENTRY_WIDTH,
                                   textvariable=StringVar(self.__f_graph_settings,
                                                          value=str(self.__current_date.month)))
 
-        self.__l_to_year = Label(self.__f_graph_settings,
+        self.__l_to_year = Label(self.__f_input_to_date,
                                  text=self.STRING_YEAR)
 
-        self.__e_to_year = Entry(self.__f_graph_settings,
+        self.__e_to_year = Entry(self.__f_input_to_date,
                                  width=self.SIZE_ENTRY_WIDTH,
                                  textvariable=StringVar(self.__f_graph_settings,
                                                         value=str(self.__current_date.year)))
@@ -222,31 +225,34 @@ class MagAppView:
         self.__b_refresh_db = Button(self.__f_graph_settings,
                                      text=self.STRING_REFRESH)
 
-        self.__cb_humidity.grid(row=1, column=0)
-        self.__cb_temperature.grid(row=1, column=1)
-        self.__l_date_range.grid(row=2, column=0, columnspan=6, sticky=W)
+        self.__cb_humidity.grid(row=0, column=0)
+        self.__cb_temperature.grid(row=0, column=1)
 
-        self.__l_from.grid(row=3, column=0, sticky=E)
+        self.__f_input_from_date.grid(row=2, column=0)
 
-        self.__l_from_day.grid(row=3, column=1, sticky=W)
-        self.__e_from_day.grid(row=3, column=2, sticky=W)
+        self.__l_date_range.pack(anchor=W)
+        self.__l_from.pack(side=LEFT, anchor=W)
 
-        self.__l_from_month.grid(row=3, column=3, sticky=W)
-        self.__e_from_month.grid(row=3, column=4, sticky=W)
+        self.__l_from_day.pack(side=LEFT, anchor=W)
+        self.__e_from_day.pack(side=LEFT, anchor=W)
 
-        self.__l_from_year.grid(row=3, column=5, sticky=W)
-        self.__e_from_year.grid(row=3, column=6, sticky=W)
+        self.__l_from_month.pack(side=LEFT, anchor=W)
+        self.__e_from_month.pack(side=LEFT, anchor=W)
 
-        self.__l_to.grid(row=4, column=0, sticky=E)
+        self.__l_from_year.pack(side=LEFT, anchor=W)
+        self.__e_from_year.pack(side=LEFT, anchor=W)
 
-        self.__l_to_day.grid(row=4, column=1, sticky=W)
-        self.__e_to_day.grid(row=4, column=2, sticky=W)
+        self.__f_input_to_date.grid(row=3, column=0)
+        self.__l_to.pack(side=LEFT, anchor=W)
 
-        self.__l_to_month.grid(row=4, column=3, sticky=W)
-        self.__e_to_month.grid(row=4, column=4, sticky=W)
+        self.__l_to_day.pack(side=LEFT, anchor=W)
+        self.__e_to_day.pack(side=LEFT, anchor=W)
 
-        self.__l_to_year.grid(row=4, column=5, sticky=W)
-        self.__e_to_year.grid(row=4, column=6, sticky=W)
+        self.__l_to_month.pack(side=LEFT, anchor=W)
+        self.__e_to_month.pack(side=LEFT, anchor=W)
+
+        self.__l_to_year.pack(side=LEFT, anchor=W)
+        self.__e_to_year.pack(side=LEFT, anchor=W)
 
         self.__b_confirm.grid(row=5, column=0)
         self.__b_refresh_db.grid(row=5, column=1)
@@ -254,7 +260,7 @@ class MagAppView:
         # endregion LeftSite
         # region table
         self.__f_sensors_list = Frame(self.__window)
-        self.__f_sensors_list.pack()
+        self.__f_sensors_list.pack(side=RIGHT)
 
         self.__columns = [self.STRING_WAREHOUSE,
                           self.STRING_DEVICE,

@@ -5,7 +5,7 @@ from MagApp.view import MagAppView
 
 class MagApp:
 
-    VERSION = 0.1
+    VERSION = 0.2
     LOGO_PATH = 'logo.png'
 
     def __init__(self):
