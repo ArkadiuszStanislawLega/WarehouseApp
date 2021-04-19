@@ -69,12 +69,11 @@ class MagAppView:
 
         self.__columns = [self.STRING_WAREHOUSE,
                           self.STRING_DEVICE,
-                          self.STRING_SENSOR_ID,
                           self.STRING_SENSOR,
                           self.STRING_TEMPERATURE,
                           self.STRING_HUMIDITY,
                           self.STRING_LAST_READ]
-        ac = (1, 2, 3, 4, 5, 6, 7)
+        ac = (1, 2, 3, 4, 5, 6)
         self.__values = {}
         self.__tv_table = ttk.Treeview(self.__f_sensors_list,
                                        columns=ac,
@@ -82,12 +81,11 @@ class MagAppView:
                                        height=100)
 
         self.__tv_table.column(ac[0], width=200, anchor=CENTER)
-        self.__tv_table.column(ac[1], width=200, anchor=CENTER)
-        self.__tv_table.column(ac[2], width=75, anchor=CENTER)
-        self.__tv_table.column(ac[3], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[1], width=100, anchor=CENTER)
+        self.__tv_table.column(ac[2], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[3], width=100, anchor=CENTER)
         self.__tv_table.column(ac[4], width=100, anchor=CENTER)
-        self.__tv_table.column(ac[5], width=100, anchor=CENTER)
-        self.__tv_table.column(ac[6], width=200, anchor=CENTER)
+        self.__tv_table.column(ac[5], width=200, anchor=CENTER)
 
         for i in range(len(ac)):
             self.__tv_table.heading(ac[i], text=self.__columns[i])

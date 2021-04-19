@@ -31,7 +31,6 @@ class MagAppController:
                     time = dr.time.strftime("%d-%m-%y %H:%M:%S")
                     values[s.id] = (w.name,
                                     d.name,
-                                    s.id,
                                     s.name,
                                     round(dr.temperature, 2),
                                     round(dr.humidity, 2),
