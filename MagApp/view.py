@@ -72,56 +72,72 @@ class MagAppView:
         self.__f_add_warehouse.pack(anchor=W)
         self.__l_add_warehouse = Label(self.__f_add_warehouse,
                                        text="Dodaj magazyn")
-        self.__l_add_warehouse.pack()
-
+        self.__l_add_warehouse.grid(row=0, column=0)
+        self.__l_add_warehouse_set_name = Label(self.__f_add_warehouse,
+                                                text="Nazwa magazynu:")
+        self.__l_add_warehouse_set_name.grid(row=1, column=0)
         self.__e_add_warehouse = Entry(self.__f_add_warehouse)
-        self.__e_add_warehouse.pack(side=LEFT)
+        self.__e_add_warehouse.grid(row=1, column=1)
 
         self.__b_add_warehouse = Button(self.__f_add_warehouse,
                                         text="Dodaj magazyn")
-        self.__b_add_warehouse.pack(side=RIGHT, )
+        self.__b_add_warehouse.grid(row=2, column=2)
         # endregion AddWarehouse
         # region AddDevice
         self.__f_add_device = Frame(self.__f_settings)
         self.__f_add_device.pack(anchor=W)
+
         self.__l_add_device = Label(self.__f_add_device,
                                     text="Dodaj urządzenie")
         self.__l_add_device.grid(row=0, column=0)
+        self.__l_add_device_set_name = Label(self.__f_add_device,
+                                             text="Nazwa urządzenia:")
+        self.__l_add_device_set_name.grid(row=1, column=0)
         self.__e_add_device = Entry(self.__f_add_device)
-        self.__e_add_device.grid(row=1, column=0)
+        self.__e_add_device.grid(row=1, column=1)
         choices_warehouses = ["Bydgoszcz", "Szczecin", "Poznań"]
 
         tkvar_warehouses = StringVar(self.__f_add_device)
         tkvar_warehouses.set("Bydgoszcz")
-
+        self.__l_add_device_select_warehouse = Label(self.__f_add_device,
+                                                     text="Wybierz magazyn:")
+        self.__l_add_device_select_warehouse.grid(row=1, column=2)
         self.__om_select_warehouse = OptionMenu(self.__f_add_device,
                                                 tkvar_warehouses,
                                                 *choices_warehouses)
-        self.__om_select_warehouse.grid(row=1, column=1)
+        self.__om_select_warehouse.grid(row=1, column=3)
         self.__b_add_device = Button(self.__f_add_device,
                                      text="Dodaj urządzenie")
-        self.__b_add_device.grid(row=2, column=1)
+        self.__b_add_device.grid(row=2, column=4)
         # endregion AddDevice
 
         # region AddSensor
         self.__f_add_sensor = Frame(self.__f_settings)
         self.__f_add_sensor.pack(anchor=W)
-        self.__l_add_sensor = Label(text="Dodaj czujnik")
-        self.__l_add_sensor.pack()
+
+        self.__l_add_sensor = Label(self.__f_add_sensor,
+                                    text="Dodaj czujnik")
+        self.__l_add_sensor.grid(row=0, column=0)
+        self.__l_add_sensor_get_name = Label(self.__f_add_sensor,
+                                             text="Nazwa czujnika:")
+        self.__l_add_sensor_get_name.grid(row=1, column=0)
         self.__e_add_sensor = Entry(self.__f_add_sensor)
-        self.__e_add_sensor.pack()
+        self.__e_add_sensor.grid(row=1, column=1)
+        self.__l_add_sensor_get_device = Label(self.__f_add_sensor,
+                                               text="Wybierz urządzenie:")
+        self.__l_add_sensor_get_device.grid(row=1, column=2)
         choices_device = ["rspi-1", "rspi-2", "rspi-3"]
 
-        tkvar_device = StringVar(self.__f_add_device)
+        tkvar_device = StringVar(self.__f_add_sensor)
         tkvar_device.set("rspi-1")
 
         self.__om_select_device = OptionMenu(self.__f_add_sensor,
                                              tkvar_device,
                                              *choices_device)
-        self.__om_select_device.pack()
+        self.__om_select_device.grid(row=1, column=3)
         self.__b_add_sensor = Button(self.__f_add_sensor,
                                      text="Dodaj czujnik")
-        self.__b_add_sensor.pack()
+        self.__b_add_sensor.grid(row=2, column=4)
         # endregion AddSensor
 
         self.__f_graph_settings = Frame(self.__f_settings)
