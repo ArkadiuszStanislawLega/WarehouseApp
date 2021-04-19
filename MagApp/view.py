@@ -67,6 +67,21 @@ class MagAppView:
         self.__l_logo.image = img
         self.__l_logo.pack()
         # endregion Logo
+        # region AddWarehouse
+        self.__f_add_warehouse = Frame(self.__f_settings)
+        self.__f_add_warehouse.pack()
+        self.__l_add_warehouse = Label(self.__f_add_warehouse,
+                                       text="Dodaj magazyn")
+        self.__l_add_warehouse.pack()
+
+        self.__e_add_warehouse = Entry(self.__f_add_warehouse)
+        self.__e_add_warehouse.pack(side=LEFT)
+
+        self.__b_add_warehouse = Button(self.__f_add_warehouse,
+                                        text="Dodaj magazyn")
+        self.__b_add_warehouse.pack(side=RIGHT, )
+        # endregion AddWarehouse
+        # region Add
 
         self.__f_graph_settings = Frame(self.__f_settings)
         self.__f_graph_settings.pack()
