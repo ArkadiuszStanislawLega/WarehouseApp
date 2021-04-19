@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from PIL import ImageTk, Image
 from MagApp.sensor_view import SensorView
 from Models.models import Warehouse, DigitalReading, Device, Sensor
 from matplotlib import pyplot as plt
@@ -14,6 +15,8 @@ class MagAppView:
     SIZE_ENTRY_WIDTH = 10
     SIZE_LIST_GRID_WIDTH = 20
     SIZE_LIST_GRID_COLUMN_PADX = 10
+    SIZE_LOGO_WIDTH = 100
+    SIZE_LOGO_HEIGHT = 100
 
     STRING_DAY = "Dzień:"
     STRING_MONTH = "Miesiąc:"
@@ -34,10 +37,12 @@ class MagAppView:
     # endregion constans
     NUMBER_OF_DAYS_EARLIER = 31
 
-    def __init__(self, version):
+    def __init__(self, version, logo_path):
+        self.__logo_path = logo_path
         self.__window = Tk()
         self.__window.title("MagApp - v" + str(version))
         self.__window.geometry(self.SIZE_WINDOW)
+        self.__window.iconphoto(False, PhotoImage(file=self.__logo_path))
 
         self.__current_date = date.today()
         self.__month_earlier = self.__current_date - \
@@ -49,6 +54,19 @@ class MagAppView:
 
         self.__f_settings = Frame(self.__window)
         self.__f_settings.pack(side=LEFT)
+        # region Logo
+        image = Image.open(self.__logo_path)
+        resiz_image = image.resize((self.SIZE_LOGO_WIDTH,
+                                    self.SIZE_LOGO_HEIGHT))
+        img = ImageTk.PhotoImage(resiz_image)
+
+        self.__l_logo = Label(self.__f_settings,
+                              image=img,
+                              width=self.SIZE_LOGO_WIDTH,
+                              height=self.SIZE_LOGO_HEIGHT)
+        self.__l_logo.image = img
+        self.__l_logo.pack()
+        # endregion Logo
 
         self.__f_graph_settings = Frame(self.__f_settings)
         self.__f_graph_settings.pack()
