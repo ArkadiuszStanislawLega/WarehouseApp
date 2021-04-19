@@ -69,7 +69,7 @@ class MagAppView:
         # endregion Logo
         # region AddWarehouse
         self.__f_add_warehouse = Frame(self.__f_settings)
-        self.__f_add_warehouse.pack()
+        self.__f_add_warehouse.pack(anchor=W)
         self.__l_add_warehouse = Label(self.__f_add_warehouse,
                                        text="Dodaj magazyn")
         self.__l_add_warehouse.pack()
@@ -81,7 +81,27 @@ class MagAppView:
                                         text="Dodaj magazyn")
         self.__b_add_warehouse.pack(side=RIGHT, )
         # endregion AddWarehouse
-        # region Add
+        # region AddDevice
+        self.__f_add_device = Frame(self.__f_settings)
+        self.__f_add_device.pack(anchor=W)
+        self.__l_add_device = Label(self.__f_add_device,
+                                    text="Dodaj urządzenie")
+        self.__l_add_device.grid(row=0, column=0)
+        self.__e_add_device = Entry(self.__f_add_device)
+        self.__e_add_device.grid(row=1, column=0)
+        choices = ["Bydgoszcz", "Szczecin", "Poznań"]
+
+        tkvar = StringVar(self.__f_add_device)
+        tkvar.set("Bydgoszcz")  # set the default option
+
+        self.__om_select_warehouse = OptionMenu(self.__f_add_device,
+                                                tkvar,
+                                                *choices)
+        self.__om_select_warehouse.grid(row=1, column=1)
+        self.__b_add_device = Button(self.__f_add_device,
+                                     text="Dodaj urządzenie")
+        self.__b_add_device.grid(row=2, column=1)
+        # endregion AddDevice
 
         self.__f_graph_settings = Frame(self.__f_settings)
         self.__f_graph_settings.pack()
