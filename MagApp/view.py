@@ -1,10 +1,16 @@
 from tkinter import *
 from tkinter import ttk
-from PIL import ImageTk, Image
+
 from MagApp.sensor_view import SensorView
 from Models.models import Warehouse, DigitalReading, Device, Sensor
 from matplotlib import pyplot as plt
 from datetime import date, timedelta, datetime
+from Fragments.sensor_detail_view import SensorDetailView
+from Fragments.add_warehouse_view import AddWarehouseView
+from Fragments.add_device_view import AddDeviceView
+from Fragments.add_sensor_view import AddSensorView
+from Fragments.create_graph_view import CreateGraphView
+from Fragments.logo_view import LogoView
 
 
 class MagAppView:
@@ -44,292 +50,18 @@ class MagAppView:
         self.__window.geometry(self.SIZE_WINDOW)
         self.__window.iconphoto(False, PhotoImage(file=self.__logo_path))
 
-        self.__current_date = date.today()
-        self.__month_earlier = self.__current_date - \
-            timedelta(self.NUMBER_OF_DAYS_EARLIER)
-
         # region LeftSite
         self.__f_settings = Frame(self.__window)
         self.__f_settings.pack(side=LEFT)
-        # region Logo
-        image = Image.open(self.__logo_path)
-        resiz_image = image.resize((self.SIZE_LOGO_WIDTH,
-                                    self.SIZE_LOGO_HEIGHT))
-        img = ImageTk.PhotoImage(resiz_image)
-
-        self.__l_logo = Label(self.__f_settings,
-                              image=img,
-                              width=self.SIZE_LOGO_WIDTH,
-                              height=self.SIZE_LOGO_HEIGHT)
-        self.__l_logo.image = img
-        self.__l_logo.pack()
-        # endregion Logo
-        # region SensorDetail
-        self.__lf_sensor_details = LabelFrame(self.__f_settings,
-                                              text="Szczegóły czujnika")
-        self.__lf_sensor_details.pack(anchor=W, expand=YES, fill=BOTH)
-        self.__l_warehouse_id_title = Label(self.__lf_sensor_details,
-                                            text="Numer identyfikacyjny magazynu:")
-        self.__l_warehouse_id_value = Label(self.__lf_sensor_details,
-                                            text="999")
-        self.__l_warehouse_id_title.grid(row=0, column=0, sticky=W)
-        self.__l_warehouse_id_value.grid(row=0, column=1, sticky=W)
-
-        self.__l_warehouse_name_title = Label(self.__lf_sensor_details,
-                                              text="Nazwa magazynu:")
-        self.__l_warehouse_name_value = Label(self.__lf_sensor_details,
-                                              text="ABCDedfs")
-        self.__l_warehouse_name_title.grid(row=1, column=0, sticky=W)
-        self.__l_warehouse_name_value.grid(row=1, column=1, sticky=W)
-
-        self.__l_device_id_title = Label(self.__lf_sensor_details,
-                                         text="Numer identyfikacyjny urządzenia:")
-        self.__l_device_id_value = Label(self.__lf_sensor_details,
-                                         text="999")
-        self.__l_device_id_title.grid(row=2, column=0, sticky=W)
-        self.__l_device_id_value.grid(row=2, column=1, sticky=W)
-
-        self.__l_device_name_title = Label(self.__lf_sensor_details,
-                                           text="Nazwa urządzenia:")
-        self.__l_device_name_value = Label(self.__lf_sensor_details,
-                                           text="ABCDedfs")
-        self.__l_device_name_title.grid(row=3, column=0, sticky=W)
-        self.__l_device_name_value.grid(row=3, column=1, sticky=W)
-
-        self.__l_sensor_id_title = Label(self.__lf_sensor_details,
-                                         text="Numer identyfikacyjny czujnika:")
-        self.__l_sensor_id_value = Label(self.__lf_sensor_details,
-                                         text="999")
-        self.__l_sensor_id_title.grid(row=4, column=0, sticky=W)
-        self.__l_sensor_id_value.grid(row=4, column=1, sticky=W)
-
-        self.__l_sensor_name_title = Label(self.__lf_sensor_details,
-                                           text="Nazwa czujnika:")
-        self.__l_sensor_name_value = Label(self.__lf_sensor_details,
-                                           text="ABCDEFG")
-        self.__l_sensor_name_title.grid(row=5, column=0, sticky=W)
-        self.__l_sensor_name_value.grid(row=5, column=1, sticky=W)
-
-        self.__l_sensor_hum_title = Label(self.__lf_sensor_details,
-                                          text="Ostatni odczyt wilgotności [%]:")
-        self.__l_sensor_hum_value = Label(self.__lf_sensor_details,
-                                          text="90")
-        self.__l_sensor_hum_title.grid(row=6, column=0, sticky=W)
-        self.__l_sensor_hum_value.grid(row=6, column=1, sticky=W)
-
-        self.__l_sensor_temp_title = Label(self.__lf_sensor_details,
-                                           text="Ostatni odczyt temperatury [C]:")
-        self.__l_sensor_temp_value = Label(self.__lf_sensor_details,
-                                           text="12,3")
-        self.__l_sensor_temp_title.grid(row=7, column=0, sticky=W)
-        self.__l_sensor_temp_value.grid(row=7, column=1, sticky=W)
-
-        self.__f_sensor_detail_buttons = Frame(self.__lf_sensor_details)
-        self.__f_sensor_detail_buttons.grid(row=8, column=0, columnspan=2)
-
-        self.__b_sensor_edit = Button(self.__f_sensor_detail_buttons,
-                                      text="Edytuj")
-
-        self.__b_sensor_remove = Button(self.__f_sensor_detail_buttons,
-                                        text="Usuń")
-
-        self.__b_sensor_edit.pack(side=LEFT, expand=YES, fill=BOTH)
-        self.__b_sensor_remove.pack(side=RIGHT, expand=YES, fill=BOTH)
-
-        # endregion
-        # region AddWarehouse
-        self.__lf_add_warehouse = LabelFrame(self.__f_settings,
-                                             text="Dodaj magazyn",
-                                             padx=10,
-                                             pady=10)
-        self.__lf_add_warehouse.pack(anchor=W, expand=YES, fill=BOTH)
-        self.__l_add_warehouse_set_name = Label(self.__lf_add_warehouse,
-                                                text="Nazwa magazynu:")
-        self.__l_add_warehouse_set_name.pack(side=LEFT)
-        self.__e_add_warehouse = Entry(self.__lf_add_warehouse)
-        self.__e_add_warehouse.pack(side=LEFT)
-
-        self.__b_add_warehouse = Button(self.__lf_add_warehouse,
-                                        text="Dodaj magazyn")
-        self.__b_add_warehouse.pack(expand=YES, fill=BOTH)
-        # endregion AddWarehouse
-        # region AddDevice
-        self.__lf_add_device = LabelFrame(self.__f_settings,
-                                          text="Dodaj urządzenie",
-                                          padx=10,
-                                          pady=10)
-        self.__lf_add_device.pack(anchor=W, expand=YES, fill=BOTH)
-
-        self.__l_add_device_set_name = Label(self.__lf_add_device,
-                                             text="Nazwa urządzenia:")
-        self.__l_add_device_set_name.grid(row=0, column=0)
-        self.__e_add_device = Entry(self.__lf_add_device)
-        self.__e_add_device.grid(row=0, column=1)
-        choices_warehouses = ["Bydgoszcz", "Szczecin", "Poznań"]
-
-        tkvar_warehouses = StringVar(self.__lf_add_device)
-        tkvar_warehouses.set("Bydgoszcz")
-        self.__l_add_device_select_warehouse = Label(self.__lf_add_device,
-                                                     text="Wybierz magazyn:")
-        self.__l_add_device_select_warehouse.grid(row=0, column=2)
-        self.__om_select_warehouse = OptionMenu(self.__lf_add_device,
-                                                tkvar_warehouses,
-                                                *choices_warehouses)
-        self.__om_select_warehouse.grid(row=0, column=3)
-        self.__b_add_device = Button(self.__lf_add_device,
-                                     text="Dodaj urządzenie")
-        self.__b_add_device.grid(row=1, column=0, columnspan=4)
-        # endregion AddDevice
-        # region AddSensor
-        self.__lf_add_sensor = LabelFrame(self.__f_settings,
-                                          text="Dodaj czujnik",
-                                          padx=10,
-                                          pady=10)
-        self.__lf_add_sensor.pack(anchor=W, expand=YES, fill=BOTH)
-
-        self.__l_add_sensor_get_name = Label(self.__lf_add_sensor,
-                                             text="Nazwa czujnika:")
-        self.__l_add_sensor_get_name.grid(row=0, column=0)
-        self.__e_add_sensor = Entry(self.__lf_add_sensor)
-        self.__e_add_sensor.grid(row=0, column=1)
-        self.__l_add_sensor_get_device = Label(self.__lf_add_sensor,
-                                               text="Wybierz urządzenie:")
-        self.__l_add_sensor_get_device.grid(row=0, column=2)
-        choices_device = ["rspi-1", "rspi-2", "rspi-3"]
-
-        tkvar_device = StringVar(self.__lf_add_sensor)
-        tkvar_device.set("rspi-1")
-
-        self.__om_select_device = OptionMenu(self.__lf_add_sensor,
-                                             tkvar_device,
-                                             *choices_device)
-        self.__om_select_device.grid(row=0, column=3)
-        self.__b_add_sensor = Button(self.__lf_add_sensor,
-                                     text="Dodaj czujnik")
-        self.__b_add_sensor.grid(row=1, column=0, columnspan=4)
-        # endregion AddSensor
-        # region Graps
-        self.__is_temperature_selected = BooleanVar()
-        self.__is_humidity_selected = BooleanVar()
-
-        self.__f_graph_settings = LabelFrame(self.__f_settings,
-                                             text=self.STRING_GRAPH_SETTINGS_TITLE,
-                                             padx=10,
-                                             pady=10)
-        self.__f_graph_settings.pack(anchor=W, expand=YES, fill=BOTH)
-
-        self.__cb_temperature = Checkbutton(self.__f_graph_settings,
-                                            text=self.STRING_TEMPERATURE,
-                                            variable=self.__is_temperature_selected,
-                                            onvalue=True,
-                                            offvalue=False)
-
-        self.__cb_humidity = Checkbutton(self.__f_graph_settings,
-                                         text=self.STRING_HUMIDITY,
-                                         variable=self.__is_humidity_selected,
-                                         onvalue=True,
-                                         offvalue=False)
-
-        self.__cb_humidity.select()
-
-        self.__f_input_from_date = Frame(self.__f_graph_settings)
-        self.__l_date_range = Label(self.__f_input_from_date,
-                                    text=self.STRING_GRAPH_SELECT_RANGE_DATE)
-
-        self.__l_from = Label(self.__f_input_from_date,
-                              text=self.STRING_SETTINGS_FROM)
-
-        self.__l_from_day = Label(self.__f_input_from_date,
-                                  text=self.STRING_DAY)
-
-        self.__e_from_day = Entry(self.__f_input_from_date,
-                                  width=self.SIZE_ENTRY_WIDTH,
-                                  textvariable=StringVar(self.__f_graph_settings,
-                                                         value=str(self.__month_earlier.day)))
-
-        self.__l_from_month = Label(self.__f_input_from_date,
-                                    text=self.STRING_MONTH)
-
-        self.__e_from_month = Entry(self.__f_input_from_date,
-                                    width=self.SIZE_ENTRY_WIDTH,
-                                    textvariable=StringVar(self.__f_graph_settings,
-                                                           value=str(self.__month_earlier.month)))
-
-        self.__l_from_year = Label(self.__f_input_from_date,
-                                   text=self.STRING_YEAR)
-
-        self.__e_from_year = Entry(self.__f_input_from_date,
-                                   width=self.SIZE_ENTRY_WIDTH,
-                                   textvariable=StringVar(self.__f_graph_settings,
-                                                          value=str(self.__month_earlier.year)))
-
-        self.__f_input_to_date = Frame(self.__f_graph_settings)
-
-        self.__l_to = Label(self.__f_input_to_date,
-                            text=self.STRING_SETTINGS_TO)
-
-        self.__l_to_day = Label(self.__f_input_to_date,
-                                text=self.STRING_DAY)
-
-        self.__e_to_day = Entry(self.__f_input_to_date,
-                                width=self.SIZE_ENTRY_WIDTH,
-                                textvariable=StringVar(self.__f_graph_settings,
-                                                       value=str(self.__current_date.day)))
-
-        self.__l_to_month = Label(self.__f_input_to_date,
-                                  text=self.STRING_MONTH)
-
-        self.__e_to_month = Entry(self.__f_input_to_date,
-                                  width=self.SIZE_ENTRY_WIDTH,
-                                  textvariable=StringVar(self.__f_graph_settings,
-                                                         value=str(self.__current_date.month)))
-
-        self.__l_to_year = Label(self.__f_input_to_date,
-                                 text=self.STRING_YEAR)
-
-        self.__e_to_year = Entry(self.__f_input_to_date,
-                                 width=self.SIZE_ENTRY_WIDTH,
-                                 textvariable=StringVar(self.__f_graph_settings,
-                                                        value=str(self.__current_date.year)))
-
-        self.__b_confirm = Button(self.__f_graph_settings,
-                                  text=self.STRING_SHOW_GRAPHS)
-
-        self.__b_refresh_db = Button(self.__f_graph_settings,
-                                     text=self.STRING_REFRESH)
-
-        self.__cb_humidity.grid(row=0, column=0)
-        self.__cb_temperature.grid(row=0, column=1)
-
-        self.__f_input_from_date.grid(row=2, column=0)
-
-        self.__l_date_range.pack(anchor=W)
-        self.__l_from.pack(side=LEFT, anchor=W)
-
-        self.__l_from_day.pack(side=LEFT, anchor=W)
-        self.__e_from_day.pack(side=LEFT, anchor=W)
-
-        self.__l_from_month.pack(side=LEFT, anchor=W)
-        self.__e_from_month.pack(side=LEFT, anchor=W)
-
-        self.__l_from_year.pack(side=LEFT, anchor=W)
-        self.__e_from_year.pack(side=LEFT, anchor=W)
-
-        self.__f_input_to_date.grid(row=3, column=0)
-        self.__l_to.pack(side=LEFT, anchor=W)
-
-        self.__l_to_day.pack(side=LEFT, anchor=W)
-        self.__e_to_day.pack(side=LEFT, anchor=W)
-
-        self.__l_to_month.pack(side=LEFT, anchor=W)
-        self.__e_to_month.pack(side=LEFT, anchor=W)
-
-        self.__l_to_year.pack(side=LEFT, anchor=W)
-        self.__e_to_year.pack(side=LEFT, anchor=W)
-
-        self.__b_confirm.grid(row=5, column=0)
-        self.__b_refresh_db.grid(row=5, column=1)
-        # endregion Graps
+        self.__logo_view = LogoView(master=self.__f_settings,
+                                    file_path=self.__logo_path,
+                                    height=self.SIZE_LOGO_HEIGHT,
+                                    width=self.SIZE_LOGO_WIDTH)
+        self.__sensor_detail_view = SensorDetailView(master=self.__f_settings)
+        self.__add_warehouse_view = AddWarehouseView(self.__f_settings)
+        self.__add_device_view = AddDeviceView(self.__f_settings)
+        self.__add_sensor_view = AddSensorView(self.__f_settings)
+        self.__create_graph_view = CreateGraphView(self.__f_settings)
         # endregion LeftSite
         # region RightSite
         self.__f_sensors_list = Frame(self.__window)
@@ -371,46 +103,9 @@ class MagAppView:
     def show(self):
         mainloop()
 
-    def get_from_date(self):
-        try:
-            day = int(self.__e_from_day.get())
-            month = int(self.__e_from_month.get())
-            year = int(self.__e_from_year.get())
-
-            if len(self.__e_from_year.get()) == 4:
-                return datetime(year, month, day)
-
-            return None
-
-        except ValueError:
-            return None
-
-    def get_to_date(self):
-        try:
-            day = int(self.__e_to_day.get())
-            month = int(self.__e_to_month.get())
-            year = int(self.__e_to_year.get())
-
-            if len(self.__e_to_year.get()) == 4:
-                return datetime(year, month, day)
-        except ValueError:
-            return None
-
-    @ property
-    def confirm_button(self):
-        return self.__b_confirm
-
-    @ property
-    def refresh_db(self):
-        return self.__b_refresh_db
-
-    @ property
-    def is_temperature_selected(self):
-        return self.__is_temperature_selected
-
-    @ property
-    def is_humidity_selected(self):
-        return self.__is_humidity_selected
+    @property
+    def create_graph_view(self):
+        return self.__create_graph_view
 
     @ property
     def table(self):
@@ -422,19 +117,3 @@ class MagAppView:
 
             for i in values:
                 self.__tv_table.insert('', END, values=values[i], tag=i)
-
-    def show_graph(self, times, data, labels):
-        """
-        Rysuje wykres z podanego czasu,
-        słownika z listami danych i słownikami etykiet.
-
-        Args:
-            times ([table[datetime]]): Czasy w których zostały wykonane pomiary
-            data ([dict<float>]): Pobrane pomiary
-            labels ([dict<string>]): Nazwy etykiet kolorów wykresów
-        """
-        for i in data:
-            plt.plot(times, data.get(i), label=str(labels.get(i)))
-
-        plt.legend()
-        plt.show()

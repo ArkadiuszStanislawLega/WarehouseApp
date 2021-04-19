@@ -11,8 +11,8 @@ class MagAppController:
     def __init__(self, model, view):
         self.__model = model
         self.__view = view
-        self.__view.confirm_button['command'] = self.create_graph
-        self.__view.refresh_db['command'] = self.refresh_table
+        self.__view.create_graph_view.confirm_button['command'] = self.create_graph
+        self.__view.create_graph_view.refresh_db['command'] = self.refresh_table
         self.refresh_table()
         self.__view.show()
         self.__labels = {}
@@ -98,8 +98,8 @@ class MagAppController:
         sensors = {}
         times = []
 
-        from_date = self.__view.get_from_date()
-        to_date = self.__view.get_to_date()
+        from_date = self.__view.create_graph_view.get_from_date()
+        to_date = self.__view.create_graph_view.get_to_date()
 
         if from_date and to_date:
             sensors = self.__prepare_data_from_db(from_date=from_date,
@@ -120,23 +120,24 @@ class MagAppController:
 
             # Flagi wskazujące czy wykres ma być złożony z temperatury
             # i wilgoci, czy tylko jeden parametrów jest wybrany.
-            is_temp = self.__view.is_temperature_selected.get()
-            is_hum = self.__view.is_humidity_selected.get()
+            is_temp = self.__view.create_graph_view.is_temperature_selected.get()
+            is_hum = self.__view.create_graph_view.is_humidity_selected.get()
 
             # Wyświetlenie wilgotności
             if is_hum and not is_temp:
-                self.__view.show_graph(times=times,
-                                       data=self.__create_readings(sensors),
-                                       labels=self.__labels)
+                self.__view.create_graph_view.show_graph(times=times,
+                                                         data=self.__create_readings(
+                                                             sensors),
+                                                         labels=self.__labels)
             # Wyświetlenie temperatury
             elif is_temp and not is_hum:
-                self.__view.show_graph(times=times,
-                                       data=self.__create_readings(sensors,
-                                                                   temperature=True),
-                                       labels=self.__labels)
+                self.__view.create_graph_view.show_graph(times=times,
+                                                         data=self.__create_readings(sensors,
+                                                                                     temperature=True),
+                                                         labels=self.__labels)
             # Wyświetelnie temperatury i wilgotności
             elif is_hum and is_temp:
                 data = self.__create_temp_and_humidity(sensors)
-                self.__view.show_graph(times=times,
-                                       data=data,
-                                       labels=self.__labels)
+                self.__view.create_graph_view.show_graph(times=times,
+                                                         data=data,
+                                                         labels=self.__labels)
