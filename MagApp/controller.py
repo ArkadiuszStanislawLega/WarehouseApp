@@ -17,6 +17,7 @@ class MagAppController:
         self.__view.sensor_detail_view.cancel_button['command'] = self.cancel_edit_sensor
         self.__view.sensor_detail_view.confirm_button['command'] = self.confirm_edit_sensor
         self.__view.add_warehouse_view.add_button['command'] = self.add_warehouse
+        self.__view.add_device_view.add_button['command'] = self.add_device
         self.__view.table.bind(
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
@@ -199,3 +200,11 @@ class MagAppController:
     def refresh_warehouses_list(self):
         self.__view.add_device_view.update_warehouses_list(
             values=Warehouse.query.all())
+
+    def add_device(self):
+        d = Device()
+        d.warehouse_id = int(self.__view.add_device_view.selected_id())
+        d.name = self.__view.add_device_view.device_name()
+        db.session.add(d)
+        db.session.commit()
+        self.refresh_table()

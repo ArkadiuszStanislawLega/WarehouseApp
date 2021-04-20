@@ -15,6 +15,8 @@ class AddDeviceView (Widget):
         self.__e_add_device = Entry(self.__lf_add_device)
         self.__e_add_device.grid(row=0, column=1)
         self.__choices_warehouses = []
+        self.__warehouses_dict_id = {}
+        self.__selcted_warehouse = StringVar(self.__lf_add_device)
         self.__om_select_warehouse = None
 
         # tkvar_warehouses = StringVar(self.__lf_add_device)
@@ -38,19 +40,33 @@ class AddDeviceView (Widget):
     def warehouses_list(self, value):
         self.__choices_warehouses = value
 
+    @property
+    def add_button(self):
+        return self.__b_add_device
+
     def update_warehouses_list(self, values):
         self.__choices_warehouses.clear()
         for w in values:
             self.__choices_warehouses.append(w.name)
+            self.__warehouses_dict_id[w.id] = w.name
 
         if len(self.__choices_warehouses) > 0:
-            tkvar_warehouses = StringVar(self.__lf_add_device)
-            tkvar_warehouses.set(self.__choices_warehouses[0])
+            self.__selcted_warehouse.set(self.__choices_warehouses[0])
 
             if self.__om_select_warehouse:
                 self.__om_select_warehouse.grid_remove()
 
             self.__om_select_warehouse = OptionMenu(self.__lf_add_device,
-                                                    tkvar_warehouses,
+                                                    self.__selcted_warehouse,
                                                     *self.__choices_warehouses)
             self.__om_select_warehouse.grid(row=0, column=3)
+
+    def selected_id(self):
+        for i in self.__warehouses_dict_id:
+            if self.__warehouses_dict_id[i] == self.__selcted_warehouse.get():
+                return i
+
+        return None
+
+    def device_name(self):
+        return self.__e_add_device.get()
