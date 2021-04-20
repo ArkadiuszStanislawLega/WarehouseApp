@@ -14,6 +14,9 @@ class MagAppController:
         self.__view.create_graph_view.confirm_button['command'] = self.create_graph
         self.__view.create_graph_view.refresh_db['command'] = self.refresh_table
         self.__view.sensor_detail_view.edit_button['command'] = self.edit_sensor
+        self.__view.table.bind(
+            '<<TreeviewSelect>>', self.fill_sensor_profile)
+
         self.refresh_table()
         self.__view.show()
         self.__labels = {}
@@ -144,3 +147,21 @@ class MagAppController:
 
     def edit_sensor(self):
         self.__view.sensor_detail_view.switch_edit_mode()
+
+    def fill_sensor_profile(self, event):
+
+        curItem = self.__view.table.focus()
+
+        id = int(self.__view.table.item(curItem,  'tags')[0])
+
+        dr = DigitalReading.query.filter(DigitalReading.sensor_id == id).order_by(
+            desc(DigitalReading.id)).limit(1).all()
+        s = Sensor.query.filter(Sensor.id == id).first()
+        d = Device.query.filter(Device.id == s.device_id).first()
+        w = Warehouse.query.filter(Warehouse.id == d.warehouse_id).first()
+
+        self.__view.sensor_detail_view.set_sensor(
+            warehouse=w, device=d, sensor=s, digital_read=dr[0])
+
+        if self.__view.sensor_detail_view.is_edit_mode_on:
+            self.edit_sensor()
