@@ -87,8 +87,6 @@ class MagAppView:
         self.__tv_table.column(ac[4], width=100, anchor=CENTER)
         self.__tv_table.column(ac[5], width=200, anchor=CENTER)
 
-        # self.__tv_table.tag_bind('cb', '<<TreeviewSelect>>', cb)
-
         for i in range(len(ac)):
             self.__tv_table.heading(ac[i], text=self.__columns[i])
 
