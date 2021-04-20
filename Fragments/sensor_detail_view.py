@@ -83,8 +83,8 @@ class SensorDetailView (Widget):
         self.__b_remove = Button(self.__f_sensor_detail_buttons,
                                  text="Usuń")
 
-        self.__b_edit.pack(side=LEFT, expand=YES, fill=BOTH)
-        self.__b_remove.pack(side=RIGHT, expand=YES, fill=BOTH)
+        self.__b_edit.pack(side=LEFT, expand=YES, fill=BOTH, anchor=W)
+        self.__b_remove.pack(side=RIGHT, expand=YES, fill=BOTH, anchor=W)
 
     @property
     def edit_button(self):
@@ -121,8 +121,8 @@ class SensorDetailView (Widget):
             self.__e_sensor_name_value.grid(row=5, column=1, sticky=W)
             self.__e_sensor_port_value.grid(row=8, column=1, sticky=W)
 
-            self.__b_confirm.pack(side=LEFT, expand=YES, fill=BOTH)
-            self.__b_cancel.pack(side=LEFT, expand=YES, fill=BOTH)
+            self.__b_confirm.pack(side=LEFT, expand=YES, fill=BOTH, anchor=W)
+            self.__b_cancel.pack(side=LEFT, expand=YES, fill=BOTH, anchor=W)
 
         else:
             self.__is_edit_mode_on = False

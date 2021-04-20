@@ -124,8 +124,8 @@ class CreateGraphView (Widget):
         self.__b_refresh_db = Button(self.__f_graph_settings,
                                      text=self.STRING_REFRESH)
 
-        self.__cb_humidity.grid(row=0, column=0)
-        self.__cb_temperature.grid(row=0, column=1)
+        self.__cb_humidity.grid(row=0, column=0, sticky=W)
+        self.__cb_temperature.grid(row=0, column=1, sticky=W)
 
         self.__f_input_from_date.grid(row=2, column=0)
 
