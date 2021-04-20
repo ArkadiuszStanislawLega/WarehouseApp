@@ -21,14 +21,11 @@ class MagAppController:
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
         self.refresh_table()
+        self.refresh_warehouses_list()
         self.__view.show()
         self.__labels = {}
 
     def refresh_table(self):
-        # warehouses = Warehouse.query.all()
-        # devices = Device.query.all()
-        # sensors = Sensor.query.all()
-
         w = Warehouse()
         d = Device()
         s = Sensor()
@@ -198,3 +195,7 @@ class MagAppController:
         db.session.add(w)
         db.session.commit()
         self.refresh_table()
+
+    def refresh_warehouses_list(self):
+        self.__view.add_device_view.update_warehouses_list(
+            values=Warehouse.query.all())

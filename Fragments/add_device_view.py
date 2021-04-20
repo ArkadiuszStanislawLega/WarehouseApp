@@ -14,17 +14,43 @@ class AddDeviceView (Widget):
         self.__l_add_device_set_name.grid(row=0, column=0)
         self.__e_add_device = Entry(self.__lf_add_device)
         self.__e_add_device.grid(row=0, column=1)
-        choices_warehouses = ["Bydgoszcz", "Szczecin", "Poznań"]
+        self.__choices_warehouses = []
+        self.__om_select_warehouse = None
 
-        tkvar_warehouses = StringVar(self.__lf_add_device)
-        tkvar_warehouses.set("Bydgoszcz")
+        # tkvar_warehouses = StringVar(self.__lf_add_device)
+        # tkvar_warehouses.set("")
         self.__l_add_device_select_warehouse = Label(self.__lf_add_device,
                                                      text="Wybierz magazyn:")
         self.__l_add_device_select_warehouse.grid(row=0, column=2)
-        self.__om_select_warehouse = OptionMenu(self.__lf_add_device,
-                                                tkvar_warehouses,
-                                                *choices_warehouses)
-        self.__om_select_warehouse.grid(row=0, column=3)
+        # self.__om_select_warehouse = OptionMenu(self.__lf_add_device,
+        #                                         tkvar_warehouses,
+        #                                         *self.__choices_warehouses)
+        # self.__om_select_warehouse.grid(row=0, column=3)
         self.__b_add_device = Button(self.__lf_add_device,
                                      text="Dodaj urządzenie")
         self.__b_add_device.grid(row=1, column=0, columnspan=4)
+
+    @property
+    def warehouses_list(self):
+        return self.__choices_warehouses
+
+    @warehouses_list.setter
+    def warehouses_list(self, value):
+        self.__choices_warehouses = value
+
+    def update_warehouses_list(self, values):
+        self.__choices_warehouses.clear()
+        for w in values:
+            self.__choices_warehouses.append(w.name)
+
+        if len(self.__choices_warehouses) > 0:
+            tkvar_warehouses = StringVar(self.__lf_add_device)
+            tkvar_warehouses.set(self.__choices_warehouses[0])
+
+            if self.__om_select_warehouse:
+                self.__om_select_warehouse.grid_remove()
+
+            self.__om_select_warehouse = OptionMenu(self.__lf_add_device,
+                                                    tkvar_warehouses,
+                                                    *self.__choices_warehouses)
+            self.__om_select_warehouse.grid(row=0, column=3)
