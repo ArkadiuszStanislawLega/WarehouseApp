@@ -15,14 +15,14 @@ from Fragments.logo_view import LogoView
 
 class MagAppView:
     # region constans
-    SIZE_WINDOW_WIDTH = 1510
-    SIZE_WINDOW_HEIGHT = 800
+    SIZE_WINDOW_WIDTH = 1400
+    SIZE_WINDOW_HEIGHT = 820
     SIZE_WINDOW = str(SIZE_WINDOW_WIDTH) + "x" + str(SIZE_WINDOW_HEIGHT)
     SIZE_ENTRY_WIDTH = 10
     SIZE_LIST_GRID_WIDTH = 20
     SIZE_LIST_GRID_COLUMN_PADX = 10
-    SIZE_LOGO_WIDTH = 100
-    SIZE_LOGO_HEIGHT = 100
+    SIZE_LOGO_WIDTH = 250
+    SIZE_LOGO_HEIGHT = 150
 
     STRING_DAY = "Dzień:"
     STRING_MONTH = "Miesiąc:"
@@ -52,7 +52,7 @@ class MagAppView:
 
         # region LeftSite
         self.__f_settings = Frame(self.__window)
-        self.__f_settings.pack(side=LEFT)
+        self.__f_settings.pack(side=LEFT, fill=None, expand=False)
         self.__logo_view = LogoView(master=self.__f_settings,
                                     file_path=self.__logo_path,
                                     height=self.SIZE_LOGO_HEIGHT,
@@ -65,7 +65,7 @@ class MagAppView:
         # endregion LeftSite
         # region RightSite
         self.__f_sensors_list = Frame(self.__window)
-        self.__f_sensors_list.pack(side=RIGHT)
+        self.__f_sensors_list.pack(side=RIGHT, fill=BOTH, expand=True)
 
         self.__columns = [self.STRING_WAREHOUSE,
                           self.STRING_DEVICE,
