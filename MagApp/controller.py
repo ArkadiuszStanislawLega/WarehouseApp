@@ -14,6 +14,8 @@ class MagAppController:
         self.__view.create_graph_view.confirm_button['command'] = self.create_graph
         self.__view.create_graph_view.refresh_db['command'] = self.refresh_table
         self.__view.sensor_detail_view.edit_button['command'] = self.edit_sensor
+        self.__view.sensor_detail_view.cancel_button['command'] = self.cancel_edit_sensor
+        self.__view.sensor_detail_view.confirm_button['command'] = self.confirm_edit_sensor
         self.__view.table.bind(
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
@@ -148,6 +150,13 @@ class MagAppController:
     def edit_sensor(self):
         self.__view.sensor_detail_view.switch_edit_mode()
 
+    def confirm_edit_sensor(self):
+        self.edit_sensor
+
+    def cancel_edit_sensor(self):
+        self.__view.sensor_detail_view.cancel_edit()
+        self.edit_sensor()
+
     def fill_sensor_profile(self, event):
 
         curItem = self.__view.table.focus()
@@ -160,8 +169,12 @@ class MagAppController:
         d = Device.query.filter(Device.id == s.device_id).first()
         w = Warehouse.query.filter(Warehouse.id == d.warehouse_id).first()
 
-        self.__view.sensor_detail_view.set_sensor(
-            warehouse=w, device=d, sensor=s, digital_read=dr[0])
+        if len(dr) > 0:
+            self.__view.sensor_detail_view.set_sensor(
+                warehouse=w, device=d, sensor=s, digital_read=dr[0])
+        else:
+            self.__view.sensor_detail_view.set_sensor(
+                warehouse=w, device=d, sensor=s, digital_read=DigitalReading())
 
         if self.__view.sensor_detail_view.is_edit_mode_on:
             self.edit_sensor()

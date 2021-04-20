@@ -71,22 +71,36 @@ class SensorDetailView (Widget):
         self.__f_sensor_detail_buttons = Frame(self.__lf_sensor_details)
         self.__f_sensor_detail_buttons.grid(row=9, column=0, columnspan=2)
 
-        self.__b_sensor_edit = Button(self.__f_sensor_detail_buttons,
-                                      text="Edytuj")
+        self.__b_edit = Button(self.__f_sensor_detail_buttons,
+                               text="Edytuj")
 
-        self.__b_sensor_remove = Button(self.__f_sensor_detail_buttons,
-                                        text="Usuń")
+        self.__b_cancel = Button(self.__f_sensor_detail_buttons,
+                                 text="Anuluj")
 
-        self.__b_sensor_edit.pack(side=LEFT, expand=YES, fill=BOTH)
-        self.__b_sensor_remove.pack(side=RIGHT, expand=YES, fill=BOTH)
+        self.__b_confirm = Button(self.__f_sensor_detail_buttons,
+                                  text="Zapisz")
+
+        self.__b_remove = Button(self.__f_sensor_detail_buttons,
+                                 text="Usuń")
+
+        self.__b_edit.pack(side=LEFT, expand=YES, fill=BOTH)
+        self.__b_remove.pack(side=RIGHT, expand=YES, fill=BOTH)
 
     @property
     def edit_button(self):
-        return self.__b_sensor_edit
+        return self.__b_edit
+
+    @property
+    def cancel_button(self):
+        return self.__b_cancel
+
+    @property
+    def confirm_button(self):
+        return self.__b_confirm
 
     @property
     def remove_button(self):
-        return self.__b_sensor_remove
+        return self.__b_remove
 
     @property
     def is_edit_mode_on(self):
@@ -100,23 +114,44 @@ class SensorDetailView (Widget):
             self.__l_sensor_name_value.grid_remove()
             self.__l_device_name_value.grid_remove()
             self.__l_warehouse_name_value.grid_remove()
+            self.__b_edit.pack_forget()
 
             self.__e_warehouse_name_value.grid(row=1, column=1, sticky=W)
             self.__e_device_name_value.grid(row=3, column=1, sticky=W)
             self.__e_sensor_name_value.grid(row=5, column=1, sticky=W)
             self.__e_sensor_port_value.grid(row=8, column=1, sticky=W)
+
+            self.__b_confirm.pack(side=LEFT, expand=YES, fill=BOTH)
+            self.__b_cancel.pack(side=LEFT, expand=YES, fill=BOTH)
+
         else:
             self.__is_edit_mode_on = False
-
             self.__e_warehouse_name_value.grid_remove()
             self.__e_device_name_value.grid_remove()
             self.__e_sensor_name_value.grid_remove()
             self.__e_sensor_port_value.grid_remove()
 
+            self.__b_confirm.pack_forget()
+            self.__b_cancel.pack_forget()
+
             self.__l_warehouse_name_value.grid(row=1, column=1, sticky=W)
             self.__l_device_name_value.grid(row=3, column=1, sticky=W)
             self.__l_sensor_name_value.grid(row=5, column=1, sticky=W)
             self.__l_sensor_port_value.grid(row=8, column=1, sticky=W)
+            self.__b_edit.pack(side=LEFT, expand=YES, fill=BOTH)
+
+    def cancel_edit(self):
+        self.__e_warehouse_name_value.delete(0, END)
+        self.__e_warehouse_name_value.insert(
+            0, str(self.__l_warehouse_name_value['text']))
+
+        self.__e_device_name_value.delete(0, END)
+        self.__e_device_name_value.insert(
+            0, str(self.__l_device_name_value['text']))
+
+        self.__e_sensor_name_value.delete(0, END)
+        self.__e_sensor_name_value.insert(
+            0, str(self.__l_sensor_name_value['text']))
 
     def set_sensor(self, warehouse, device, sensor, digital_read):
         self.__l_warehouse_id_value.config(text=str(warehouse.id))
