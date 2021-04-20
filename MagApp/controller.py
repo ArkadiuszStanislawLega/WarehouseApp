@@ -13,6 +13,7 @@ class MagAppController:
         self.__view = view
         self.__view.create_graph_view.confirm_button['command'] = self.create_graph
         self.__view.create_graph_view.refresh_db['command'] = self.refresh_table
+        self.__view.sensor_detail_view.edit_button['command'] = self.edit_sensor
         self.refresh_table()
         self.__view.show()
         self.__labels = {}
@@ -140,3 +141,6 @@ class MagAppController:
                 self.__view.create_graph_view.show_graph(times=times,
                                                          data=data,
                                                          labels=self.__labels)
+
+    def edit_sensor(self):
+        self.__view.sensor_detail_view.switch_edit_mode()

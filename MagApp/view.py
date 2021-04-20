@@ -109,6 +109,10 @@ class MagAppView:
     def table(self):
         return self.__tv_table
 
+    @property
+    def sensor_detail_view(self):
+        return self.__sensor_detail_view
+
     def refresh(self, values):
         if values and len(values) > 0:
             self.__tv_table.delete(*self.__tv_table.get_children())
