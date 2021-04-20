@@ -1,4 +1,4 @@
-from tkinter import LabelFrame, Label, Widget, Button, Frame, W, BOTH, YES, LEFT, RIGHT, Entry, END
+from tkinter import LabelFrame, Label, Widget, Button, Frame, W, E, BOTH, YES, NO, LEFT, RIGHT, Entry, END
 
 
 class SensorDetailView (Widget):
@@ -14,6 +14,10 @@ class SensorDetailView (Widget):
     STRING_LAST_READ_TEMPERATURE = "Ostatni odczyt temperatury [C]:"
     STRING_SENSOR_PORT = "Port na urządzeniu:"
     STRING_LAST_READ_DATE = "Data ostatniego odczytu:"
+    STRING_CONFIRM = "Zapisz"
+    STRING_EDIT = "Edytuj"
+    STRING_REMOVE = "Usuń"
+    STRING_CANCEL = "Anuluj"
 
     def __init__(self, master=None, cnf={}, **k):
         self.__is_edit_mode_on = False
@@ -89,22 +93,22 @@ class SensorDetailView (Widget):
         self.__l_last_read_value.grid(row=9, column=1, sticky=W)
 
         self.__f_sensor_detail_buttons = Frame(self.__lf_sensor_details)
-        self.__f_sensor_detail_buttons.grid(row=10, column=0, columnspan=2)
+        self.__f_sensor_detail_buttons.grid(row=10, column=0)
 
         self.__b_edit = Button(self.__f_sensor_detail_buttons,
-                               text="Edytuj")
+                               text=self.STRING_EDIT)
 
         self.__b_cancel = Button(self.__f_sensor_detail_buttons,
-                                 text="Anuluj")
+                                 text=self.STRING_CANCEL)
 
         self.__b_confirm = Button(self.__f_sensor_detail_buttons,
-                                  text="Zapisz")
+                                  text=self.STRING_CONFIRM)
 
         self.__b_remove = Button(self.__f_sensor_detail_buttons,
-                                 text="Usuń")
+                                 text=self.STRING_REMOVE)
 
-        self.__b_edit.pack(side=LEFT, expand=YES, fill=BOTH, anchor=W)
-        self.__b_remove.pack(side=RIGHT, expand=YES, fill=BOTH, anchor=W)
+        self.__b_edit.pack(side=LEFT)
+        self.__b_remove.pack(side=RIGHT)
 
     @property
     def edit_button(self):
@@ -141,8 +145,8 @@ class SensorDetailView (Widget):
             self.__e_sensor_name_value.grid(row=5, column=1, sticky=W)
             self.__e_sensor_port_value.grid(row=8, column=1, sticky=W)
 
-            self.__b_confirm.pack(side=LEFT, expand=YES, fill=BOTH, anchor=W)
-            self.__b_cancel.pack(side=LEFT, expand=YES, fill=BOTH, anchor=W)
+            self.__b_confirm.pack(side=LEFT)
+            self.__b_cancel.pack(side=RIGHT)
 
         else:
             self.__is_edit_mode_on = False
@@ -158,7 +162,7 @@ class SensorDetailView (Widget):
             self.__l_device_name_value.grid(row=3, column=1, sticky=W)
             self.__l_sensor_name_value.grid(row=5, column=1, sticky=W)
             self.__l_sensor_port_value.grid(row=8, column=1, sticky=W)
-            self.__b_edit.pack(side=LEFT, expand=YES, fill=BOTH)
+            self.__b_edit.pack(side=LEFT)
 
     def cancel_edit(self):
         self.__e_warehouse_name_value.delete(0, END)
