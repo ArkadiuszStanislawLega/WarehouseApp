@@ -168,10 +168,16 @@ class SensorDetailView (Widget):
         self.__l_sensor_name_value.config(text=str(sensor.name))
         self.__e_sensor_name_value.delete(0, END)
         self.__e_sensor_name_value.insert(0, str(sensor.name))
-        self.__l_sensor_hum_value.config(
-            text=str(round(digital_read.humidity, 2)))
-        self.__l_sensor_temp_value.config(
-            text=str(round(digital_read.temperature, 2)))
 
-        # self.__l_sensor_port_value.config(text=str(sensor.port))
-        # self.__e_sensor_port_value.set(str(sensor.port))
+        if digital_read.id:
+            self.__l_sensor_hum_value.config(
+                text=str(round(digital_read.humidity, 2)))
+            self.__l_sensor_temp_value.config(
+                text=str(round(digital_read.temperature, 2)))
+            # self.__l_sensor_port_value.config(text=str(sensor.port))
+            # self.__e_sensor_port_value.set(str(sensor.port))
+        else:
+            self.__l_sensor_hum_value.config(
+                text="--")
+            self.__l_sensor_temp_value.config(
+                text="--")

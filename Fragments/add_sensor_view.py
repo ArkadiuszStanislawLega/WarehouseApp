@@ -26,6 +26,10 @@ class AddSensorView (Widget):
                                      text="Dodaj czujnik")
         self.__b_add_sensor.grid(row=1, column=0, columnspan=4)
 
+    @property
+    def add_button(self):
+        return self.__b_add_sensor
+
     def update_device_list(self, values):
         self.__choices_device.clear()
         for d in values:
@@ -46,7 +50,7 @@ class AddSensorView (Widget):
     def selected_id(self):
         for i in self.__devices_dict_id:
             if self.__devices_dict_id[i] == self.__selected_device.get():
-                return i
+                return int(i)
 
         return None
 

@@ -18,6 +18,7 @@ class MagAppController:
         self.__view.sensor_detail_view.confirm_button['command'] = self.confirm_edit_sensor
         self.__view.add_warehouse_view.add_button['command'] = self.add_warehouse
         self.__view.add_device_view.add_button['command'] = self.add_device
+        self.__view.add_sensor_view.add_button['command'] = self.add_sensor
         self.__view.table.bind(
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
@@ -45,14 +46,22 @@ class MagAppController:
                 for s in sen[d.id]:
                     dr = DigitalReading.query.filter(DigitalReading.sensor_id == s.id).order_by(
                         desc(DigitalReading.id)).limit(1).all()
-                    dr = dr[0]
-                    time = dr.time.strftime("%d-%m-%y %H:%M:%S")
-                    values[s.id] = (w.name,
-                                    d.name,
-                                    s.name,
-                                    round(dr.temperature, 2),
-                                    round(dr.humidity, 2),
-                                    time)
+                    if len(dr) > 0:
+                        dr = dr[0]
+                        time = dr.time.strftime("%d-%m-%y %H:%M:%S")
+                        values[s.id] = (w.name,
+                                        d.name,
+                                        s.name,
+                                        round(dr.temperature, 2),
+                                        round(dr.humidity, 2),
+                                        time)
+                    else:
+                        values[s.id] = (w.name,
+                                        d.name,
+                                        s.name,
+                                        "--",
+                                        "--",
+                                        "--")
 
         self.__view.refresh(values)
 
@@ -216,3 +225,11 @@ class MagAppController:
 
         self.__view.add_sensor_view.update_device_list(
             values=Device.query.all())
+
+    def add_sensor(self):
+        s = Sensor()
+        s.device_id = self.__view.add_sensor_view.selected_id()
+        s.name = self.__view.add_sensor_view.sensor_name()
+        db.session.add(s)
+        db.session.commit()
+        self.refresh_table()
