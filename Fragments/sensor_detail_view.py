@@ -216,9 +216,9 @@ class SensorDetailView (Widget):
             self.__b_edit.pack_forget()
 
             self.__e_warehouse_name_value.grid(row=1, column=1, sticky=W)
-            self.__e_device_name_value.grid(row=3, column=1, sticky=W)
-            self.__e_sensor_name_value.grid(row=5, column=1, sticky=W)
-            self.__e_sensor_port_value.grid(row=8, column=1, sticky=W)
+            self.__e_device_name_value.grid(row=1, column=1, sticky=W)
+            self.__e_sensor_name_value.grid(row=1, column=1, sticky=W)
+            self.__e_sensor_port_value.grid(row=4, column=1, sticky=W)
 
             self.__b_confirm.pack(side=LEFT)
             self.__b_cancel.pack(side=RIGHT)
