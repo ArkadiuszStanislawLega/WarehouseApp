@@ -16,6 +16,7 @@ class MagAppController:
         self.__view.sensor_detail_view.edit_button['command'] = self.edit_sensor
         self.__view.sensor_detail_view.cancel_button['command'] = self.cancel_edit_sensor
         self.__view.sensor_detail_view.confirm_button['command'] = self.confirm_edit_sensor
+        self.__view.add_warehouse_view.add_button['command'] = self.add_warehouse
         self.__view.table.bind(
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
@@ -24,13 +25,25 @@ class MagAppController:
         self.__labels = {}
 
     def refresh_table(self):
-        warehouses = Warehouse.query.all()
-        devices = Device.query.all()
-        sensors = Sensor.query.all()
+        # warehouses = Warehouse.query.all()
+        # devices = Device.query.all()
+        # sensors = Sensor.query.all()
+
+        w = Warehouse()
+        d = Device()
+        s = Sensor()
+
         values = {}
-        for w in warehouses:
-            for d in devices:
-                for s in sensors:
+        war = Warehouse.query.all()
+        dev = {}
+        sen = {}
+
+        for w in war:
+            dev[w.id] = Device.query.filter(
+                Device.warehouse_id == w.id).all()
+            for d in dev[w.id]:
+                sen[d.id] = Sensor.query.filter(Sensor.device_id == d.id).all()
+                for s in sen[d.id]:
                     dr = DigitalReading.query.filter(DigitalReading.sensor_id == s.id).order_by(
                         desc(DigitalReading.id)).limit(1).all()
                     dr = dr[0]
@@ -178,3 +191,10 @@ class MagAppController:
 
         if self.__view.sensor_detail_view.is_edit_mode_on:
             self.edit_sensor()
+
+    def add_warehouse(self):
+        w = Warehouse()
+        w.name = self.__view.add_warehouse_view.entry_value
+        db.session.add(w)
+        db.session.commit()
+        self.refresh_table()

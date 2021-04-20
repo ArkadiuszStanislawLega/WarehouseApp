@@ -18,7 +18,10 @@ class Device(db.Model):
     sensor_id = db.relationship('Sensor', backref='device')
 
     def __repr__(self):
-        return str(self.id) + " " + self.name + " " + str(self.warehouse_id)
+        if self.id and self.warehouse_id:
+            return str(self.id) + " " + self.name + " " + str(self.warehouse_id)
+        else:
+            return "empty"
 
 
 class Sensor(db.Model):

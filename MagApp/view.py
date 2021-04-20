@@ -112,6 +112,10 @@ class MagAppView:
         return self.__tv_table
 
     @property
+    def add_warehouse_view(self):
+        return self.__add_warehouse_view
+
+    @property
     def sensor_detail_view(self):
         return self.__sensor_detail_view
 

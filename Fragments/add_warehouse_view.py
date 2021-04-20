@@ -17,3 +17,11 @@ class AddWarehouseView (Widget):
         self.__b_add_warehouse = Button(self.__lf_add_warehouse,
                                         text="Dodaj magazyn")
         self.__b_add_warehouse.pack(expand=YES, fill=BOTH)
+
+    @property
+    def add_button(self):
+        return self.__b_add_warehouse
+
+    @property
+    def entry_value(self):
+        return self.__e_add_warehouse.get()
