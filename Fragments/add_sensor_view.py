@@ -24,7 +24,7 @@ class AddSensorView (Widget):
 
         self.__b_add_sensor = Button(self.__lf_add_sensor,
                                      text="Dodaj czujnik")
-        self.__b_add_sensor.grid(row=1, column=0, columnspan=4)
+        self.__b_add_sensor.grid(row=1, column=0)
 
     @property
     def add_button(self):

@@ -25,7 +25,7 @@ class AddDeviceView (Widget):
 
         self.__b_add_device = Button(self.__lf_add_device,
                                      text="Dodaj urządzenie")
-        self.__b_add_device.grid(row=1, column=0, columnspan=4)
+        self.__b_add_device.grid(row=1, column=0)
 
     @property
     def warehouses_list(self):
