@@ -120,6 +120,10 @@ class MagAppView:
         return self.__add_device_view
 
     @property
+    def add_sensor_view(self):
+        return self.__add_sensor_view
+
+    @property
     def sensor_detail_view(self):
         return self.__sensor_detail_view
 

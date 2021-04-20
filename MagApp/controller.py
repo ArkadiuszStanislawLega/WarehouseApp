@@ -23,6 +23,7 @@ class MagAppController:
 
         self.refresh_table()
         self.refresh_warehouses_list()
+        self.refresh_devices_list()
         self.__view.show()
         self.__labels = {}
 
@@ -196,6 +197,8 @@ class MagAppController:
         db.session.add(w)
         db.session.commit()
         self.refresh_table()
+        self.refresh_warehouses_list()
+        self.refresh_devices_list()
 
     def refresh_warehouses_list(self):
         self.__view.add_device_view.update_warehouses_list(
@@ -208,3 +211,8 @@ class MagAppController:
         db.session.add(d)
         db.session.commit()
         self.refresh_table()
+
+    def refresh_devices_list(self):
+
+        self.__view.add_sensor_view.update_device_list(
+            values=Device.query.all())

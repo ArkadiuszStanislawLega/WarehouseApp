@@ -19,15 +19,10 @@ class AddDeviceView (Widget):
         self.__selcted_warehouse = StringVar(self.__lf_add_device)
         self.__om_select_warehouse = None
 
-        # tkvar_warehouses = StringVar(self.__lf_add_device)
-        # tkvar_warehouses.set("")
         self.__l_add_device_select_warehouse = Label(self.__lf_add_device,
                                                      text="Wybierz magazyn:")
         self.__l_add_device_select_warehouse.grid(row=0, column=2)
-        # self.__om_select_warehouse = OptionMenu(self.__lf_add_device,
-        #                                         tkvar_warehouses,
-        #                                         *self.__choices_warehouses)
-        # self.__om_select_warehouse.grid(row=0, column=3)
+
         self.__b_add_device = Button(self.__lf_add_device,
                                      text="Dodaj urządzenie")
         self.__b_add_device.grid(row=1, column=0, columnspan=4)
