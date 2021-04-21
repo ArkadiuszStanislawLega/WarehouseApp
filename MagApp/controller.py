@@ -11,14 +11,16 @@ class MagAppController:
     def __init__(self, model, view):
         self.__model = model
         self.__view = view
-        self.__view.create_graph_view.confirm_button['command'] = self.create_graph
-        self.__view.create_graph_view.refresh_db['command'] = self.refresh_table
-        self.__view.sensor_detail_view.edit_button['command'] = self.edit_sensor
-        self.__view.sensor_detail_view.cancel_button['command'] = self.cancel_edit_sensor
-        self.__view.sensor_detail_view.confirm_button['command'] = self.confirm_edit_sensor
-        self.__view.add_warehouse_view.add_button['command'] = self.add_warehouse
-        self.__view.add_device_view.add_button['command'] = self.add_device
-        self.__view.add_sensor_view.add_button['command'] = self.add_sensor
+        self.__view.left_section.create_graph_view.confirm_button['command'] = self.create_graph
+        self.__view.left_section.create_graph_view.refresh_db['command'] = self.refresh_table
+        self.__view.left_section.sensor_detail_view.edit_button['command'] = self.edit_sensor
+        self.__view.left_section.sensor_detail_view.cancel_button[
+            'command'] = self.cancel_edit_sensor
+        self.__view.left_section.sensor_detail_view.confirm_button[
+            'command'] = self.confirm_edit_sensor
+        self.__view.left_section.add_warehouse_view.add_button['command'] = self.add_warehouse
+        self.__view.left_section.add_device_view.add_button['command'] = self.add_device
+        self.__view.left_section.add_sensor_view.add_button['command'] = self.add_sensor
         self.__view.right_section.table.bind(
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
@@ -68,8 +70,8 @@ class MagAppController:
     def __prepare_data_from_db(self, from_date=None, to_date=None):
         full_data = {}
         filtered = {}
-        for i in self.__view.table.selection():
-            ids = int(self.__view.table.item(i, 'tag')[0])
+        for i in self.__view.left_section.table.selection():
+            ids = int(self.__view.left_section.table.item(i, 'tag')[0])
 
             full_data[ids] = DigitalReading.query.filter(
                 DigitalReading.sensor_id == ids).all()
@@ -122,8 +124,8 @@ class MagAppController:
         sensors = {}
         times = []
 
-        from_date = self.__view.create_graph_view.get_from_date()
-        to_date = self.__view.create_graph_view.get_to_date()
+        from_date = self.__view.left_section.create_graph_view.get_from_date()
+        to_date = self.__view.left_section.create_graph_view.get_to_date()
 
         if from_date and to_date:
             sensors = self.__prepare_data_from_db(from_date=from_date,
@@ -144,36 +146,36 @@ class MagAppController:
 
             # Flagi wskazujące czy wykres ma być złożony z temperatury
             # i wilgoci, czy tylko jeden parametrów jest wybrany.
-            is_temp = self.__view.create_graph_view.is_temperature_selected.get()
-            is_hum = self.__view.create_graph_view.is_humidity_selected.get()
+            is_temp = self.__view.left_section.create_graph_view.is_temperature_selected.get()
+            is_hum = self.__view.left_section.create_graph_view.is_humidity_selected.get()
 
             # Wyświetlenie wilgotności
             if is_hum and not is_temp:
-                self.__view.create_graph_view.show_graph(times=times,
-                                                         data=self.__create_readings(
-                                                             sensors),
-                                                         labels=self.__labels)
+                self.__view.left_section.create_graph_view.show_graph(times=times,
+                                                                      data=self.__create_readings(
+                                                                          sensors),
+                                                                      labels=self.__labels)
             # Wyświetlenie temperatury
             elif is_temp and not is_hum:
-                self.__view.create_graph_view.show_graph(times=times,
-                                                         data=self.__create_readings(sensors,
-                                                                                     temperature=True),
-                                                         labels=self.__labels)
+                self.__view.left_section.create_graph_view.show_graph(times=times,
+                                                                      data=self.__create_readings(sensors,
+                                                                                                  temperature=True),
+                                                                      labels=self.__labels)
             # Wyświetelnie temperatury i wilgotności
             elif is_hum and is_temp:
                 data = self.__create_temp_and_humidity(sensors)
-                self.__view.create_graph_view.show_graph(times=times,
-                                                         data=data,
-                                                         labels=self.__labels)
+                self.__view.left_section.create_graph_view.show_graph(times=times,
+                                                                      data=data,
+                                                                      labels=self.__labels)
 
     def edit_sensor(self):
-        self.__view.sensor_detail_view.switch_edit_mode()
+        self.__view.left_section.sensor_detail_view.switch_edit_mode()
 
     def confirm_edit_sensor(self):
         self.edit_sensor
 
     def cancel_edit_sensor(self):
-        self.__view.sensor_detail_view.cancel_edit()
+        self.__view.left_section.sensor_detail_view.cancel_edit()
         self.edit_sensor()
 
     def fill_sensor_profile(self, event):
@@ -188,18 +190,18 @@ class MagAppController:
         w = Warehouse.query.filter(Warehouse.id == d.warehouse_id).first()
 
         if len(dr) > 0:
-            self.__view.sensor_detail_view.set_sensor(
+            self.__view.left_section.sensor_detail_view.set_sensor(
                 warehouse=w, device=d, sensor=s, digital_read=dr[0])
         else:
-            self.__view.sensor_detail_view.set_sensor(
+            self.__view.left_section.sensor_detail_view.set_sensor(
                 warehouse=w, device=d, sensor=s, digital_read=DigitalReading())
 
-        if self.__view.sensor_detail_view.is_edit_mode_on:
+        if self.__view.left_section.sensor_detail_view.is_edit_mode_on:
             self.edit_sensor()
 
     def add_warehouse(self):
         w = Warehouse()
-        w.name = self.__view.add_warehouse_view.entry_value
+        w.name = self.__view.left_section.add_warehouse_view.entry_value
         db.session.add(w)
         db.session.commit()
         self.refresh_table()
@@ -207,26 +209,27 @@ class MagAppController:
         self.refresh_devices_list()
 
     def refresh_warehouses_list(self):
-        self.__view.add_device_view.update_warehouses_list(
+        self.__view.left_section.add_device_view.update_warehouses_list(
             values=Warehouse.query.all())
 
     def add_device(self):
         d = Device()
-        d.warehouse_id = int(self.__view.add_device_view.selected_id())
-        d.name = self.__view.add_device_view.device_name()
+        d.warehouse_id = int(
+            self.__view.left_section.add_device_view.selected_id())
+        d.name = self.__view.left_section.add_device_view.device_name()
         db.session.add(d)
         db.session.commit()
         self.refresh_table()
 
     def refresh_devices_list(self):
 
-        self.__view.add_sensor_view.update_device_list(
+        self.__view.left_section.add_sensor_view.update_device_list(
             values=Device.query.all())
 
     def add_sensor(self):
         s = Sensor()
-        s.device_id = self.__view.add_sensor_view.selected_id()
-        s.name = self.__view.add_sensor_view.sensor_name()
+        s.device_id = self.__view.left_section.add_sensor_view.selected_id()
+        s.name = self.__view.left_section.add_sensor_view.sensor_name()
         db.session.add(s)
         db.session.commit()
         self.refresh_table()

@@ -11,7 +11,7 @@ class MagApp:
     def __init__(self):
         self.__model = MagAppModel()
         self.__view = MagAppView(version=self.VERSION,
-                                 logo_path=self.LOGO_PATH)
+                                 path=self.LOGO_PATH)
         self.__controller = MagAppController(model=self.__model,
                                              view=self.__view)
 
