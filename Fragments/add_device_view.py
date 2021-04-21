@@ -11,6 +11,7 @@ class AddDeviceView (Widget):
 
         self.__l_add_device_set_name = Label(self.__lf_add_device,
                                              text="Nazwa urządzenia:")
+
         self.__l_add_device_set_name.grid(row=0, column=0)
         self.__e_add_device = Entry(self.__lf_add_device)
         self.__e_add_device.grid(row=0, column=1)
