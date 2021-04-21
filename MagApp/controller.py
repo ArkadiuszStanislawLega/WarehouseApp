@@ -19,7 +19,7 @@ class MagAppController:
         self.__view.add_warehouse_view.add_button['command'] = self.add_warehouse
         self.__view.add_device_view.add_button['command'] = self.add_device
         self.__view.add_sensor_view.add_button['command'] = self.add_sensor
-        self.__view.table.bind(
+        self.__view.right_section.table.bind(
             '<<TreeviewSelect>>', self.fill_sensor_profile)
 
         self.refresh_table()
@@ -63,12 +63,11 @@ class MagAppController:
                                         "--",
                                         "--")
 
-        self.__view.refresh(values)
+        self.__view.right_section.refresh(values)
 
     def __prepare_data_from_db(self, from_date=None, to_date=None):
         full_data = {}
         filtered = {}
-        curItem = self.__view.table.focus()
         for i in self.__view.table.selection():
             ids = int(self.__view.table.item(i, 'tag')[0])
 
@@ -89,7 +88,6 @@ class MagAppController:
     def __create_readings(self, sensors, temperature=False):
         values = {}
         for sensor in sensors:
-            hum_key = sensor
             temp_key = sensor
             self.__labels[sensor] = sensor
             values[temp_key] = []
@@ -179,10 +177,9 @@ class MagAppController:
         self.edit_sensor()
 
     def fill_sensor_profile(self, event):
+        curItem = self.__view.right_section.table.focus()
 
-        curItem = self.__view.table.focus()
-
-        id = int(self.__view.table.item(curItem,  'tags')[0])
+        id = int(self.__view.right_section.table.item(curItem,  'tags')[0])
 
         dr = DigitalReading.query.filter(DigitalReading.sensor_id == id).order_by(
             desc(DigitalReading.id)).limit(1).all()

@@ -2,15 +2,15 @@ from tkinter import *
 from tkinter import ttk
 
 from MagApp.sensor_view import SensorView
-from Models.models import Warehouse, DigitalReading, Device, Sensor
-from matplotlib import pyplot as plt
-from datetime import date, timedelta, datetime
+from Models.models import Warehouse, Device, Sensor
+from datetime import date
 from Fragments.sensor_detail_view import SensorDetailView
 from Fragments.add_warehouse_view import AddWarehouseView
 from Fragments.add_device_view import AddDeviceView
 from Fragments.add_sensor_view import AddSensorView
 from Fragments.create_graph_view import CreateGraphView
 from Fragments.logo_view import LogoView
+from Fragments.right_section_view import RightSectionView
 
 
 class MagAppView:
@@ -31,13 +31,6 @@ class MagAppView:
     STRING_GRAPH_SELECT_RANGE_DATE = "Wskaż zakres dat:"
     STRING_SETTINGS_FROM = "od"
     STRING_SETTINGS_TO = "do"
-    STRING_WAREHOUSE = "Magazyn"
-    STRING_DEVICE = "Urządzenie"
-    STRING_SENSOR = "Czujnik"
-    STRING_TEMPERATURE = "Temperatura [°C]"
-    STRING_HUMIDITY = "Wilgotność [%]"
-    STRING_LAST_READ = "Ostatni odczyt"
-    STRING_SENSOR_ID = "Id czujnika"
     STRING_SHOW_GRAPHS = "Pokaż wykres"
     STRING_REFRESH = "Odśwież"
     # endregion constans
@@ -81,51 +74,18 @@ class MagAppView:
         self.__add_sensor_view = AddSensorView(self.__f_setting_content)
         self.__create_graph_view = CreateGraphView(self.__f_setting_content)
         # endregion LeftSite
-        # region RightSite
-        self.__f_sensors_list = Frame(self.__window)
-        self.__f_sensors_list.pack(side=RIGHT, fill=BOTH, expand=True)
-
-        self.__columns = [self.STRING_WAREHOUSE,
-                          self.STRING_DEVICE,
-                          self.STRING_SENSOR,
-                          self.STRING_TEMPERATURE,
-                          self.STRING_HUMIDITY,
-                          self.STRING_LAST_READ]
-        ac = (1, 2, 3, 4, 5, 6)
-        self.__values = {}
-        self.__tv_table = ttk.Treeview(self.__f_sensors_list,
-                                       columns=ac,
-                                       show="headings",
-                                       height=100)
-
-        self.__tv_table.column(ac[0], width=150, anchor=CENTER)
-        self.__tv_table.column(ac[1], width=100, anchor=CENTER)
-        self.__tv_table.column(ac[2], width=150, anchor=CENTER)
-        self.__tv_table.column(ac[3], width=100, anchor=CENTER)
-        self.__tv_table.column(ac[4], width=100, anchor=CENTER)
-        self.__tv_table.column(ac[5], width=150, anchor=CENTER)
-
-        for i in range(len(ac)):
-            self.__tv_table.heading(ac[i], text=self.__columns[i])
-
-        self.__tv_table.pack(side=LEFT, fill=Y)
-
-        self.__s_vertical_list = Scrollbar(self.__f_sensors_list,
-                                           orient=VERTICAL)
-        self.__s_vertical_list.pack(side=RIGHT, fill=Y)
-
-        # endregion RightSite
+        self.__right_section_view = RightSectionView(self.__window)
 
     def show(self):
         mainloop()
 
     @property
+    def right_section(self):
+        return self.__right_section_view
+
+    @property
     def create_graph_view(self):
         return self.__create_graph_view
-
-    @ property
-    def table(self):
-        return self.__tv_table
 
     @property
     def add_warehouse_view(self):
@@ -142,10 +102,3 @@ class MagAppView:
     @property
     def sensor_detail_view(self):
         return self.__sensor_detail_view
-
-    def refresh(self, values):
-        if values and len(values) > 0:
-            self.__tv_table.delete(*self.__tv_table.get_children())
-
-            for i in values:
-                self.__tv_table.insert('', END, values=values[i], tag=i)
