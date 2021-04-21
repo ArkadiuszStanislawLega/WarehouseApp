@@ -8,17 +8,14 @@ from datetime import date
 from Fragments.right_section_view import RightSectionView
 from Fragments.left_section_view import LeftSectionView
 
+from mag_app_constans import LOGO_PATH, VERSION, SIZE_WINDOW
+
 
 class MagAppView:
     # region constans
-    SIZE_WINDOW_WIDTH = 1400
-    SIZE_WINDOW_HEIGHT = 820
-    SIZE_WINDOW = str(SIZE_WINDOW_WIDTH) + "x" + str(SIZE_WINDOW_HEIGHT)
     SIZE_ENTRY_WIDTH = 10
     SIZE_LIST_GRID_WIDTH = 20
     SIZE_LIST_GRID_COLUMN_PADX = 10
-    SIZE_LOGO_WIDTH = 250
-    SIZE_LOGO_HEIGHT = 150
 
     STRING_DAY = "Dzień:"
     STRING_MONTH = "Miesiąc:"
@@ -32,12 +29,11 @@ class MagAppView:
     # endregion constans
     NUMBER_OF_DAYS_EARLIER = 31
 
-    def __init__(self, version, path):
-        self.__logo_path = path
+    def __init__(self):
         self.__window = Tk()
-        self.__window.title("MagApp - v" + str(version))
-        self.__window.geometry(self.SIZE_WINDOW)
-        self.__window.iconphoto(False, PhotoImage(file=self.__logo_path))
+        self.__window.title("MagApp - v" + str(VERSION))
+        self.__window.geometry(SIZE_WINDOW)
+        self.__window.iconphoto(False, PhotoImage(file=LOGO_PATH))
 
         self.__left_section_view = LeftSectionView(self.__window)
 

@@ -10,9 +10,6 @@ from Fragments.logo_view import LogoView
 
 
 class LeftSectionView(Widget):
-    LOGO_PATH = 'logo.png'
-    SIZE_LOGO_WIDTH = 250
-    SIZE_LOGO_HEIGHT = 150
 
     def __init__(self, master=None, cnf={}, **k):
         self.__f_settings = Frame(master)
@@ -34,10 +31,7 @@ class LeftSectionView(Widget):
         self.__c_settings.create_window((0, 0),
                                         window=self.__f_setting_content)
 
-        self.__logo_view = LogoView(master=self.__f_setting_content,
-                                    file_path=self.LOGO_PATH,
-                                    height=self.SIZE_LOGO_HEIGHT,
-                                    width=self.SIZE_LOGO_WIDTH)
+        self.__logo_view = LogoView(master=self.__f_setting_content)
         self.__sensor_detail_view = SensorDetailView(
             master=self.__f_setting_content)
         self.__add_warehouse_view = AddWarehouseView(self.__f_setting_content)

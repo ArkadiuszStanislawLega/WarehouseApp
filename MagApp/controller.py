@@ -70,8 +70,8 @@ class MagAppController:
     def __prepare_data_from_db(self, from_date=None, to_date=None):
         full_data = {}
         filtered = {}
-        for i in self.__view.left_section.table.selection():
-            ids = int(self.__view.left_section.table.item(i, 'tag')[0])
+        for i in self.__view.right_section.table.selection():
+            ids = int(self.__view.right_section.table.item(i, 'tag')[0])
 
             full_data[ids] = DigitalReading.query.filter(
                 DigitalReading.sensor_id == ids).all()
