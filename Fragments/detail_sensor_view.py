@@ -8,6 +8,8 @@ class DetailSensorView (Widget):
     STRING_LAST_READ_TEMPERATURE = "Ostatni odczyt temperatury [C]:"
     STRING_SENSOR_PORT = "Port na urządzeniu:"
     STRING_LAST_READ_DATE = "Data ostatniego odczytu:"
+    STRING_EMPY_PROPERTY = "--"
+
     def __init__(self, size_width, master=None, cnf={}, **k):
         self.__is_sensor_removing = BooleanVar()
         self.__is_sensor_removing = False
@@ -20,30 +22,36 @@ class DetailSensorView (Widget):
                                          text=self.STRING_SENSOR_ID)
         self.__l_sensor_id_value = Label(self.__lf_dg_and_sensor_detail,
                                          width=size_width+2)
+
         self.__cb_sensor_delete = Checkbutton(self.__lf_dg_and_sensor_detail,
                                               offvalue=False,
                                               onvalue=True,
                                               variable=self.__is_sensor_removing)
+
         self.__l_sensor_name_title = Label(self.__lf_dg_and_sensor_detail,
                                            text=self.STRING_SENSOR_NAME)
         self.__l_sensor_name_value = Label(self.__lf_dg_and_sensor_detail,
                                            width=size_width)
         self.__e_sensor_name_value = Entry(self.__lf_dg_and_sensor_detail,
                                            width=size_width)
+
         self.__l_sensor_hum_title = Label(self.__lf_dg_and_sensor_detail,
                                           text=self.STRING_LAST_READ_HUMIDITY)
         self.__l_sensor_hum_value = Label(self.__lf_dg_and_sensor_detail,
                                           width=size_width)
+
         self.__l_sensor_temp_title = Label(self.__lf_dg_and_sensor_detail,
                                            text=self.STRING_LAST_READ_TEMPERATURE)
         self.__l_sensor_temp_value = Label(self.__lf_dg_and_sensor_detail,
                                            width=size_width)
+
         self.__l_sensor_port_title = Label(self.__lf_dg_and_sensor_detail,
                                            text=self.STRING_SENSOR_PORT)
         self.__l_sensor_port_value = Label(self.__lf_dg_and_sensor_detail,
                                            width=size_width)
         self.__e_sensor_port_value = Entry(self.__lf_dg_and_sensor_detail,
                                            width=size_width)
+
         self.__l_last_read_title = Label(self.__lf_dg_and_sensor_detail,
                                          text=self.STRING_LAST_READ_DATE)
         self.__l_last_read_value = Label(self.__lf_dg_and_sensor_detail,
@@ -64,7 +72,7 @@ class DetailSensorView (Widget):
 
         self.__l_sensor_port_title.grid(row=4, column=0, sticky=W)
         self.__l_sensor_port_value.grid(row=4, column=1, sticky=W)
-        
+
         self.__l_last_read_title.grid(row=5, column=0, sticky=W)
         self.__l_last_read_value.grid(row=5, column=1, sticky=W)
 

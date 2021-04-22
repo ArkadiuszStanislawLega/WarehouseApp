@@ -4,7 +4,6 @@ from Fragments.detail_device_view import DetailDeviceView
 from Fragments.detail_sensor_view import DetailSensorView
 
 class SensorDetailView (Widget):
-    STRING_EMPY_PROPERTY = "--"
     STRING_TITLE = "Szczegóły czujnika"
     STRING_CONFIRM = "Zapisz"
     STRING_EDIT = "Edytuj"
@@ -28,7 +27,7 @@ class SensorDetailView (Widget):
         # region Buttons
         self.__f_sensor_detail_buttons = Frame(self.__lf_sensor_details)
         self.__f_sensor_detail_buttons.grid(row=3, column=0)
-        
+
         self.__b_edit = Button(self.__f_sensor_detail_buttons,
                                text=self.STRING_EDIT)
 

@@ -8,6 +8,7 @@ class DetailWarehouseView (Widget):
     def __init__(self, size_width, master=None, cnf={}, **k):
         self.__is_warehouse_removing = BooleanVar()
         self.__is_warehouse_removing = False
+        
         self.__lf_warehouse_detail = LabelFrame(master,
                                                 text=self.STRING_WAREHOUSE)
         self.__lf_warehouse_detail.grid(row=0, column=0)
@@ -34,6 +35,7 @@ class DetailWarehouseView (Widget):
                                               width=size_width)
         self.__e_warehouse_name_value = Entry(self.__lf_warehouse_detail,
                                               width=size_width)
+
         self.__l_warehouse_name_title.grid(row=1, column=0, sticky=W)
         self.__l_warehouse_name_value.grid(row=1, column=1, sticky=W)
 

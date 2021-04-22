@@ -17,8 +17,10 @@ class DetailDeviceView (Widget):
                                          text=self.STRING_DEVICE_ID)
         self.__l_device_id_value = Label(self.__lf_device_detail,
                                          width=size_width)
+
         self.__cb_device_delete = Checkbutton(self.__lf_device_detail,
                                               variable=self.__is_device_removing)
+                                              
         self.__l_device_name_title = Label(self.__lf_device_detail,
                                            text=self.STRING_DEVICE_NAME)
         self.__l_device_name_value = Label(self.__lf_device_detail,
