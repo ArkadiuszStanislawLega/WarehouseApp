@@ -10,6 +10,8 @@ class DetailSensorView (Widget):
     STRING_LAST_READ_DATE = "Data ostatniego odczytu:"
     STRING_EMPY_PROPERTY = "--"
 
+    FORMAT_DATE = "%d-%m-%y %H:%M:%S"
+
     def __init__(self, size_width, master=None, cnf={}, **k):
         self.__is_sensor_removing = BooleanVar()
         self.__is_sensor_removing = False
@@ -106,7 +108,7 @@ class DetailSensorView (Widget):
         if digital_read.id:
             hum = str(round(digital_read.humidity, 2))
             temp = str(round(digital_read.temperature, 2))
-            time = digital_read.time.strftime("%d-%m-%y %H:%M:%S")
+            time = digital_read.time.strftime(self.FORMAT_DATE)
 
             self.__l_sensor_hum_value.config(text=hum)
             self.__l_sensor_temp_value.config(text=temp)

@@ -7,6 +7,9 @@ import datetime
 class MagAppController:
     STRING_LABEL_TEMPERATURE = " temperatura"
     STRING_LABEL_HUMIDITY = " wilgotność"
+    STRING_EMPTY_VALUE = "--"
+
+    FORMAT_DATE = "%d-%m-%y %H:%M:%S"
 
     def __init__(self, model, view):
         self.__model = model
@@ -50,7 +53,7 @@ class MagAppController:
                         desc(DigitalReading.id)).limit(1).all()
                     if len(dr) > 0:
                         dr = dr[0]
-                        time = dr.time.strftime("%d-%m-%y %H:%M:%S")
+                        time = dr.time.strftime(self.FORMAT_DATE)
                         values[s.id] = (w.name,
                                         d.name,
                                         s.name,
@@ -61,9 +64,9 @@ class MagAppController:
                         values[s.id] = (w.name,
                                         d.name,
                                         s.name,
-                                        "--",
-                                        "--",
-                                        "--")
+                                        self.STRING_EMPTY_VALUE,
+                                        self.STRING_EMPTY_VALUE,
+                                        self.STRING_EMPTY_VALUE)
 
         self.__view.right_section.refresh(values)
 
