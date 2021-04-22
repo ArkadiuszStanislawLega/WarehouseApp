@@ -7,9 +7,7 @@ import datetime
 class MagAppController:
     STRING_LABEL_TEMPERATURE = " temperatura"
     STRING_LABEL_HUMIDITY = " wilgotność"
-    STRING_EMPTY_VALUE = "--"
 
-    FORMAT_DATE = "%d-%m-%y %H:%M:%S"
 
     def __init__(self, model, view):
         self.__model = model
@@ -34,41 +32,7 @@ class MagAppController:
         self.__labels = {}
 
     def refresh_table(self):
-        w = Warehouse()
-        d = Device()
-        s = Sensor()
-
-        values = {}
-        war = Warehouse.query.all()
-        dev = {}
-        sen = {}
-
-        for w in war:
-            dev[w.id] = Device.query.filter(
-                Device.warehouse_id == w.id).all()
-            for d in dev[w.id]:
-                sen[d.id] = Sensor.query.filter(Sensor.device_id == d.id).all()
-                for s in sen[d.id]:
-                    dr = DigitalReading.query.filter(DigitalReading.sensor_id == s.id).order_by(
-                        desc(DigitalReading.id)).limit(1).all()
-                    if len(dr) > 0:
-                        dr = dr[0]
-                        time = dr.time.strftime(self.FORMAT_DATE)
-                        values[s.id] = (w.name,
-                                        d.name,
-                                        s.name,
-                                        round(dr.temperature, 2),
-                                        round(dr.humidity, 2),
-                                        time)
-                    else:
-                        values[s.id] = (w.name,
-                                        d.name,
-                                        s.name,
-                                        self.STRING_EMPTY_VALUE,
-                                        self.STRING_EMPTY_VALUE,
-                                        self.STRING_EMPTY_VALUE)
-
-        self.__view.right_section.refresh(values)
+        self.__view.right_section.refresh(self.__model.data_for_table())
 
     def __prepare_data_from_db(self, from_date=None, to_date=None):
         full_data = {}
@@ -135,8 +99,6 @@ class MagAppController:
                                                   to_date=to_date)
         else:
             sensors = self.__prepare_data_from_db()
-
-        # d = datetime.datetime(2021, 4, 15)
 
         if len(sensors) > 0:
             for i in sensors.keys():
