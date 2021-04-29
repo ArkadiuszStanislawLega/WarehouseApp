@@ -103,17 +103,23 @@ class MainLoop:
         self.__settings.collect_sensors_data_counter += 1
 
     def __refres_graphs(self):
+        print("Refresh graphs")
+        print("temp, hum, time", self.__model.temperature_values, self.__model.humidity_values, self.__model.time_values)
         self.__view.updateGraphs(temperatureValues=self.__model.temperature_values,
                                  humidityValues=self.__model.humidity_values,
                                  timesValues=self.__model.time_values)
         self.__settings.graphs_refresh_counter = 0
 
     def __loop(self):
+        print("Main loop")
         while self.__is_loop_working:
             self.__increment_counters()
             if self.__settings.collect_sensors_data_counter == self.__settings.collect_sensors_data_delay:
                 self.__settings.collect_sensors_data_counter = 0
                 self.__model.collect_data_from_sensors()
+
+            print("refresh graph counter = ",self.__settings.graphs_refresh_counter)
+            print("setting refresh graph delay = ",self.__settings.refresh_graps_delay)
 
             if self.__settings.graphs_refresh_counter == self.__settings.refresh_graps_delay:
                 self.__settings.graphs_refresh_counter = 0

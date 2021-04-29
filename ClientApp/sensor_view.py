@@ -19,6 +19,7 @@ class SensorView(Widget):
         self.__widget_column = column
         self.__l_name = Label(master, text=title, padx=30)
 
+
         self.__l_temperature_title = Label(master,
                                            text=self.STRING_TEMPERATURE)
         self.__l_temperature_value = Label(
@@ -40,18 +41,24 @@ class SensorView(Widget):
         self.show_graph()
 
     def show_graph(self, temperature_values=[], humidity_values=[], time_values=[]):
+        print("show_graph")
+        print("hum, temp, time",len(humidity_values), len(temperature_values), len(time_values))
         fig = Figure(figsize=(3, 3), dpi=100)
+        canvas = FigureCanvasTkAgg(fig, master=self.__parent)
         plot = fig.add_subplot(111)
+        plt.xlim(0, 100)
+        plt.ylim(-10, 100)
+        fig.canvas.flush_events()
+
         plot.plot(time_values, temperature_values, label="temp")
         plot.plot(time_values, humidity_values, label="wilg")
         plot.legend()
-        # plt.ion()
-        plt.xlim(0, 100)
-        plt.ylim(-10, 100)
-
-        canvas = FigureCanvasTkAgg(fig, master=self.__parent)
-        canvas.draw()
-        fig.canvas.flush_events()
+        plt.ion()
+        print("Przed okresśleniem figury")
+        print("Próba rysowaniatk")
+        # self.__canvas.draw()
+        print("Przed zrzutem pamieci")
+        print("Por zrzuceniu pamieci")
         canvas.get_tk_widget().grid(row=self.__widget_row+4,
                                     column=self.__widget_column, columnspan=2)
 
