@@ -12,12 +12,9 @@ class ClientAppView:
         self.__window.title(strings.STRING_WINDOW_TITLE + " v" + str(app_version))
         self.__window.geometry(values.SIZE_WINDOW)
 
-
-
         # region connection
         self.__f_connection = Frame(self.__window)
-        self.__f_connection.grid(row=0, column=0, pady=10)
-
+        self.__f_connection.grid(row=0, column=0)
 
         image = Image.open(LOGO_PATH)
         resiz_image = image.resize((SIZE_LOGO_WIDTH, SIZE_LOGO_HEIGHT))
@@ -60,7 +57,7 @@ class ClientAppView:
         # endregion connection
         # region sensors
         self.__f_sensors = Frame(self.__window)
-        self.__f_sensors.grid(row=1, column=0, pady=100)
+        self.__f_sensors.grid(row=1, column=0, pady=10)
         self.__sensors_views = {}
         self.__create_sesnsors_views()
         # endregion sensors

@@ -18,7 +18,7 @@ class SensorView(Widget):
         self.__parent = master
         self.__widget_row = row
         self.__widget_column = column
-        self.__l_name = Label(master, text=title, padx=30)
+        self.__l_name = Label(master, text=title)
 
 
         self.__l_temperature_title = Label(master,
@@ -45,9 +45,6 @@ class SensorView(Widget):
         fig = Figure(figsize=(3, 3), constrained_layout=True)
         canvas = FigureCanvasTkAgg(fig, master=self.__parent)
         plot = fig.add_subplot(111)
-        # plot.set_xlim(1,4)
-        # plt.xlim(0, 100)
-        # plt.ylim(-10, 100)
         fig.canvas.flush_events()
 
         plot.plot(time_values, temperature_values, label="temp")
