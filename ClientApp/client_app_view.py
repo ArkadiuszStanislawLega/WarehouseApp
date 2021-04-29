@@ -44,7 +44,7 @@ class ClientAppView:
         # endregion connection
         # region sensors
         self.__f_sensors = Frame(self.__window)
-        self.__f_sensors.grid(row=1, column=0, pady=10)
+        self.__f_sensors.grid(row=1, column=0, pady=100)
 
         self.__sensors_views = {}
         self.__create_sesnsors_views()
@@ -127,18 +127,11 @@ class ClientAppView:
             column += 2
 
     def updateGraphs(self, timesValues, humidityValues, temperatureValues):
-        print("Client app view")
-        print("update graphs")
-        print("time, hum, temp", len(timesValues), len(humidityValues), len(temperatureValues))
-        print(40*"_")
         for i in range(values.NUMBER_OF_SENSORS):
-            print("time, hum, temp ----> ", timesValues, humidityValues[i], temperatureValues[i])
             if len(timesValues) == len(humidityValues[i]) == len(temperatureValues[i]) > 0 :
                     self.__sensors_views.get(i).show_graph(time_values=timesValues,
                                                         humidity_values=humidityValues.get(i),
                                                         temperature_values=temperatureValues.get(i))
-                    print("Zrobił:", i)
-        print(40*"*")
 
     def update_sensor_view(self, sensor_id, digital_read):
         self.__sensors_views.get(sensor_id).update_values(title=str(sensor_id+1)+". " + strings.STRING_SENSOR_NAME,

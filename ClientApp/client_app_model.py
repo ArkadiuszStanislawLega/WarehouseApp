@@ -286,7 +286,6 @@ class ClientAppModel:
         Zbiera dane z czujników i zapisuje do tablic, z których
         tworzone są wykresy.
         """
-        print("collect_data_from_sensors")
         self.__save_values_for_graphs()
 
 
@@ -304,8 +303,6 @@ class ClientAppModel:
 
                 self.__save_arg_in_table(value=digital_read.humidity,table=table_hum)
                 self.__save_arg_in_table(value=digital_read.temperature, table=table_temp)
-                print("tablice, wilg, temp", table_hum, table_temp)
-                print("tablica czasu", self.__time_values)
 
         
     def __save_arg_in_table(self, value, table):

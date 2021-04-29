@@ -4,6 +4,7 @@ from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 from tkinter import Label, Widget
 import matplotlib
+from matplotlib.ticker import MultipleLocator
 matplotlib.use('Agg')
 
 
@@ -41,24 +42,23 @@ class SensorView(Widget):
         self.show_graph()
 
     def show_graph(self, temperature_values=[], humidity_values=[], time_values=[]):
-        print("show_graph")
-        print("hum, temp, time",len(humidity_values), len(temperature_values), len(time_values))
-        fig = Figure(figsize=(3, 3), dpi=100)
+        fig = Figure(figsize=(3, 3), constrained_layout=True)
         canvas = FigureCanvasTkAgg(fig, master=self.__parent)
         plot = fig.add_subplot(111)
-        plt.xlim(0, 100)
-        plt.ylim(-10, 100)
+        # plot.set_xlim(1,4)
+        # plt.xlim(0, 100)
+        # plt.ylim(-10, 100)
         fig.canvas.flush_events()
 
         plot.plot(time_values, temperature_values, label="temp")
         plot.plot(time_values, humidity_values, label="wilg")
         plot.legend()
         plt.ion()
-        print("Przed okresśleniem figury")
-        print("Próba rysowaniatk")
-        # self.__canvas.draw()
-        print("Przed zrzutem pamieci")
-        print("Por zrzuceniu pamieci")
+
+        #Zmiana kierunku pisania dat/godzin na osi x
+        for tick in plot.get_xticklabels():
+            tick.set_rotation(45)
+
         canvas.get_tk_widget().grid(row=self.__widget_row+4,
                                     column=self.__widget_column, columnspan=2)
 
