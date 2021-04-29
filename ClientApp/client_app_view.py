@@ -1,5 +1,7 @@
 from tkinter import *
 from ClientApp.sensor_view import SensorView
+from PIL import ImageTk, Image
+from mag_app_constans import LOGO_PATH, SIZE_LOGO_HEIGHT, SIZE_LOGO_WIDTH
 import strings
 import values
 
@@ -10,9 +12,23 @@ class ClientAppView:
         self.__window.title(strings.STRING_WINDOW_TITLE + " v" + str(app_version))
         self.__window.geometry(values.SIZE_WINDOW)
 
+
+
         # region connection
         self.__f_connection = Frame(self.__window)
         self.__f_connection.grid(row=0, column=0, pady=10)
+
+
+        image = Image.open(LOGO_PATH)
+        resiz_image = image.resize((SIZE_LOGO_WIDTH, SIZE_LOGO_HEIGHT))
+        img = ImageTk.PhotoImage(resiz_image)
+
+        self.__l_logo = Label(self.__f_connection,
+                              image=img,
+                              width=SIZE_LOGO_WIDTH,
+                              height=SIZE_LOGO_HEIGHT)
+        self.__l_logo.image = img
+        self.__l_logo.pack(side=LEFT)
 
         self.__l_title_entry_address = Label(self.__f_connection,
                                              text=strings.STRING_TITLE_ADRES_INPUT)
@@ -45,7 +61,6 @@ class ClientAppView:
         # region sensors
         self.__f_sensors = Frame(self.__window)
         self.__f_sensors.grid(row=1, column=0, pady=100)
-
         self.__sensors_views = {}
         self.__create_sesnsors_views()
         # endregion sensors
