@@ -1,7 +1,5 @@
 # A distributed system for collecting humidity and temperature parameters in containers
 
-There are three server applications, a client application for the device for collecting parameters, and a client application for reading data from devices.
-
 ## Hardware
 
 1. Raspberry Pi 4
